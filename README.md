@@ -5,6 +5,8 @@ Status: Work-In-Progress
 
 A Blockchain developers club community project, for educational purposes.
 
+---
+
 Current cli usage:
 - `-help` - show commands.
 - `key-utils generate` - generate a keypair and address.
@@ -15,6 +17,8 @@ Current cli usage:
 - `node stop` - stop the local node from mining.
 - `node show` - show node information.
 - `node show-block _block_hash (-json/-json-raw)` - find a block using the a hash.
+
+---
 
 Discord: https://discord.gg/ZsyQqyk
 
