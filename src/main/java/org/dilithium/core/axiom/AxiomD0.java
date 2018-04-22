@@ -40,6 +40,7 @@ import org.dilithium.util.KeyUtil;
  * AxiomD0 - Dilithium 0
  * This Proof of work axiom is for testing.
  * 
+ * TODO: replace print with logger.
  */
 public class AxiomD0 implements Axiom {
 
@@ -167,7 +168,7 @@ public class AxiomD0 implements Axiom {
         
         //Get Block header and parent hash:
         BlockHeader header = block.header;
-        Block parent = context.getBlock(header.getIndex());
+        Block parent = context.getBlock(header.getIndex()-1);
         BlockHeader parentHeader;
         
         //Check the header exists...
@@ -181,16 +182,17 @@ public class AxiomD0 implements Axiom {
         
         if(isGenesis){
             if(Arrays.equals(GenesisBlock.getInstance().getHash(),header.getHash())){
-                // This is genesis block.
+                System.out.println("valid Genesis block hash");// This is genesis block.
                 return true;
             }else{
-                //This genesis blocks hash is invalid.
+                System.out.println("Invalid Genesis block hash");//This genesis blocks hash is invalid.
                 return false;
             }
         }
         
         //Does this blocks parent exist (,if required)?
         if(parent == null){
+            System.out.println("parent coulnt be found");
             //This blocks parent is missing.
             return false;
         }else{
@@ -199,12 +201,14 @@ public class AxiomD0 implements Axiom {
         
         //Is Parents Index one less than this blocks index ?
         if(header.getIndex()-1 != parentHeader.getIndex()){
+            System.out.println("Blocks index is inccorect");
             //This blocks index is incorrect
             return false;
         }
         
         //Check if blockheaders difficulty is valid
         if(header.getDifficulty() < calculateDifficulty(header)){
+            System.out.println("Difficulty is too small");
             //Difficulty is too small
             return false;
         }
@@ -212,12 +216,14 @@ public class AxiomD0 implements Axiom {
         //Check to see if block was correctly mined.
         if(!isBlockSolutionValid(header)){
             //This blocks solution is invalid. The block hasnt be correctly mined.
+            System.out.println("Solution isnt valid");
             return false;
         }
         
         //check timestamp isnt to large
         if( ByteUtil.bytesToInt(header.getTimeStamp()) > ByteUtil.bytesToInt(ByteUtil.getNowTimeStamp()) ){
             //Timestamp is too large
+            System.out.println("Timestamp too large");
             return false;
         }
         
@@ -226,6 +232,7 @@ public class AxiomD0 implements Axiom {
         //Check merkles root from block matches the merkle root in the header
         if( !Arrays.equals(block.getMerkleRoot(),header.getMerkleRoot()) ){
             //merkles root do not match.
+            System.out.println("merkle root doesnt match");
             return false;
         }
         
@@ -235,10 +242,12 @@ public class AxiomD0 implements Axiom {
             currentTx = block.getTransaction(i);
             if(currentTx == null){
                 // A transaction is missing, or couldn'g be decoded.
+                System.out.println("transaction is missing");
                 return false;
             }
             if(! verifyTransaction(currentTx,context)){
                 // transaction is not valid !
+                System.out.println("transaction isnt valid");
                 return false;
             }            
         }
@@ -246,6 +255,7 @@ public class AxiomD0 implements Axiom {
         //Check coinbase address:
         if(header.getReward().compareTo(getBlockReward(header)) == 1 ){
             //Block reward is to large.
+            System.out.println("reward is too large");
             return false;
         }
         

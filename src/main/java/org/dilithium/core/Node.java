@@ -36,6 +36,7 @@ public class Node {
     private Miner miner;
     private Axiom axiom;
     private BlockHeader tallestHeader;
+    private Block currentBlock;
     private boolean shouldMine;
     
     public Node(Context context, Block genesisBlock, Miner miner, Axiom axiom){
@@ -71,11 +72,25 @@ public class Node {
     
     //Methods
     public void start(){
-        System.out.println("- Creating new block");
-        Block currentBlock = new Block(tallestHeader, axiom);
-        System.out.println("- Encoding new block");
-        currentBlock.getEncoded();
-        System.out.println("- Done");
+        
+        if(currentBlock == null){
+            System.out.println("- Creating new block");
+            currentBlock = new Block(tallestHeader, axiom);
+            System.out.println("- Encoding new block");
+            currentBlock.getEncoded();
+            System.out.println("- Done");
+        }
+        
+        System.out.println("# Mining current Block");
+        this.miner = new Miner(currentBlock);
+        this.miner.setAxiom(axiom);
+        Block minedBlock = this.miner.mineBlock();
+        System.out.println("# Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
+        System.out.println("+ Adding new block to context...");
+        context.putBlock(minedBlock);
+        tallestHeader = minedBlock.header;
+        System.out.println("- Complete");    
+
     }
     
     //Overrides

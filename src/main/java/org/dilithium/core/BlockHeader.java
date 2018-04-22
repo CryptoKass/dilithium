@@ -146,9 +146,8 @@ public class BlockHeader { // ~141 bytes
     }
     
     public long getDifficulty(){
-        if(difficulty == 0){
-            this.difficulty = getAxiom().calculateDifficulty(this);
-        }
+
+        this.difficulty = getAxiom().calculateDifficulty(this);
         return this.difficulty;
     }
     

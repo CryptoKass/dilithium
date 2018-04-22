@@ -43,7 +43,7 @@ public class Miner {
         axiom = AxiomManager.getAxiom(block.header.getAxiomID());
     }
     
-    public void mineBlock(){
+    public Block mineBlock(){
         BlockHeader header = block.header;
         //Get difficulty
         long difficulty = header.getDifficulty();
@@ -60,13 +60,15 @@ public class Miner {
         
         while(!solved){
             solution = axiom.generateBlockSolution(header);
-            System.out.println("nonce: " +  ByteUtil.bytesToInt(header.getNonce()) );
-            System.out.println("Target:" + Hex.toHexString(target));
-            System.out.println("attempt: " + Hex.toHexString(Arrays.copyOfRange(solution, 0, target.length)));
+            //System.out.println("// nonce: " +  ByteUtil.bytesToInt(header.getNonce()) );
+            //System.out.println("// Target:" + Hex.toHexString(target));
+            //System.out.println("// attempt: " + Hex.toHexString(Arrays.copyOfRange(solution, 0, target.length)));
             solved = Arrays.equals(Arrays.copyOfRange(solution, 0, target.length), target);
         }
-        System.out.println("mined");
-        System.out.println("solution: " + Hex.toHexString(header.getHash()));
+        System.out.println("- successfully mined!");
+        System.out.println("- solution: " + Hex.toHexString(header.getHash()));
+        
+        return block;
     }
     
     public void setAxiom(Axiom axiom){
