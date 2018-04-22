@@ -52,7 +52,7 @@ public class Node {
     }
     
     public long getLength(){
-        return this.tallestHeader.getIndex()+1;
+        return this.context.calculateChainSize()+1;
     }
     
     public BlockHeader getTallestHeader(){
@@ -74,8 +74,9 @@ public class Node {
                 "- latest-hash: " + Encoding.bytesToHex(getTallestHeader().getHash()) + ", \n" +
                 "- is-node-mining: " + isMining() + ", \n" +
                 "- }";
-        
     }
     
-       
+    
+   
+    
 }
