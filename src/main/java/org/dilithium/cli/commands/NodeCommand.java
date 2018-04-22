@@ -24,6 +24,7 @@ import org.dilithium.Start;
 import org.dilithium.cli.Commander;
 import org.dilithium.core.Block;
 import org.dilithium.db.Context;
+import org.dilithium.serialization.Json;
 import org.dilithium.util.Encoding;
 
 /**
@@ -81,6 +82,20 @@ public class NodeCommand implements Command {
             
             if(block == null) {
                 Commander.CommanderPrint("ERROR ! block not found.");
+                return;
+            }
+            
+            if(args[2] != null){
+                if(args[2].equals("-json")){
+                    Commander.CommanderPrint("found block: " + Json.createJsonPretty(block));            
+                    return;
+                }
+                if(args[2].equals("-json-raw")){
+                    Commander.CommanderPrint("found block: " + Json.createJson(block));            
+                    return;
+                }
+                
+                Commander.CommanderPrint("ERROR 2 argument unknown !");
                 return;
             }
             

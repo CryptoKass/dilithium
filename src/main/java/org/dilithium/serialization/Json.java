@@ -28,6 +28,7 @@ import com.google.gson.GsonBuilder;
 public class Json {
     
     private static Gson gson;
+    private static Gson prettyGson;
     
     private static Gson getGson(){
         if(gson == null){
@@ -36,8 +37,19 @@ public class Json {
         return gson;
     }
     
+    private static Gson getPrettyGson(){
+        if(prettyGson == null){
+            prettyGson = new GsonBuilder().setPrettyPrinting().create();
+        }
+        return prettyGson;
+    }
+    
     public static String createJson(Object o){
         return getGson().toJson(o);
+    }
+    
+    public static String createJsonPretty(Object o){
+        return getPrettyGson().toJson(o);
     }
     
 }
