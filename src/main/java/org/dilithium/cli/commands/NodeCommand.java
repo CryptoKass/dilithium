@@ -56,7 +56,8 @@ public class NodeCommand implements Command {
         String[] params = getParams();
         
         if(args[0].equals(params[2])){ //start
-            Commander.CommanderPrint("Node Failed to start, Start method not yet implemented");
+            Commander.CommanderPrint("Starting node: ");
+            Start.localNode.start();
             return;
         }
         
@@ -72,8 +73,8 @@ public class NodeCommand implements Command {
                 return;
             }
             
-            Commander.CommanderPrint("fetching block...");
-            Commander.CommanderPrint("searching for block with index: " + indexString);          
+            Commander.CommanderPrint("Fetching block...");
+            Commander.CommanderPrint("Searching for block with index: " + indexString);          
             Context context = Start.localNode.getContext();
             long index = Long.parseLong(indexString);
             Block block = context.getBlock(index);
@@ -86,6 +87,8 @@ public class NodeCommand implements Command {
             Commander.CommanderPrint("found block: " + block.toString());            
             return;
         }
+        
+        
         
         if(args[0].equals(params[0])){ //help
             Commander.CommanderPrint(getHelp());
