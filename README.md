@@ -1,4 +1,4 @@
-Dilithium WIP
+![Icon](https://i.imgur.com/x2if7vJ.png)Dilithium WIP
 ---
 [![Build Status](https://travis-ci.org/CryptoKass/dilithium.svg?branch=master)](https://travis-ci.org/CryptoKass/dilithium.svg)
 
@@ -24,3 +24,4 @@ Current cli usage:
 
 Discord: https://discord.gg/ZsyQqyk
 
+![DilithiumGem](https://i.imgur.com/2ubvWak.png)
