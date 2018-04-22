@@ -54,7 +54,7 @@ public class Commander {
         }catch(Exception e){
             CommanderPrint("command failed to execute.");
         }
-       
+             
     }
     
     /* populates the command arraylist with commands. */

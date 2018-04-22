@@ -120,4 +120,9 @@ public class Block {
         });
         return encodedBlock;
     }
+    
+    @Override 
+    public String toString(){
+        return header.toString();
+    }
 }

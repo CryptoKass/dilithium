@@ -52,7 +52,7 @@ public class GenesisBlock implements GenesisConfig {
                 ByteUtil.getNowTimeStamp(),
                 3,
                 0,
-                ByteUtil.bigIntegerToBytes(BigInteger.ZERO),
+                ByteUtil.intToBytes(0),
                 AxiomManager.getAxiom("axiomD0").getAxiomID(),
                 BigInteger.ZERO,
                 getHash(),

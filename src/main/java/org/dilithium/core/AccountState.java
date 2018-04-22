@@ -102,9 +102,9 @@ public class AccountState {
     /* toString override */
     public String toString(){
         return "{ Balance: " + balance.toString() + ", \n" +
-              "  Nonce: " + nonce.toString() + ", \n" +
-              "  Code Hash: " + Hex.toHexString(codeHash) +
-              " }";
+              "-  Nonce: " + nonce.toString() + ", \n" +
+              "-  Code Hash: " + Hex.toHexString(codeHash) +
+              "-  }";
     }
     /* get clone of account state with modifed balance*/
     public AccountState addBalance(BigInteger value){

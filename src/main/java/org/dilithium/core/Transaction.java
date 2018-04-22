@@ -169,11 +169,11 @@ public class Transaction {
     @Override
     public String toString(){
         return "transaction: {\n" +
-                "sender: " + KeyUtil.publicKeyToAddressString(getSender()) + ", \n" +
-                "recipient: " + Encoding.bytesToAddress(getRecipient()) + ", \n" +
-                "value: " + ByteUtil.bytesToBigInteger(getValue()) + ", \n" +
-                "signature: " + Encoding.bytesToHex(getSignature()) + ", \n" +
-                "}";
+                "- sender: " + KeyUtil.publicKeyToAddressString(getSender()) + ", \n" +
+                "- recipient: " + Encoding.bytesToAddress(getRecipient()) + ", \n" +
+                "- value: " + ByteUtil.bytesToBigInteger(getValue()) + ", \n" +
+                "- signature: " + Encoding.bytesToHex(getSignature()) + ", \n" +
+                "- }";
         
     }
     

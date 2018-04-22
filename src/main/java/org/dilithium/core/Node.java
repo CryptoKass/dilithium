@@ -44,6 +44,7 @@ public class Node {
         this.minerWallet = Start.localWallet;
         this.axiom = axiom;
         this.tallestHeader = genesisBlock.header;
+        context.putBlock(genesisBlock);
     }
     
     public Node(){
@@ -69,10 +70,10 @@ public class Node {
     @Override
     public String toString(){
         return "node: {\n" +
-                "chain-length: " + getLength() + ", \n" +
-                "latest-hash: " + Encoding.bytesToHex(getTallestHeader().getHash()) + ", \n" +
-                "is-node-mining: " + isMining() + ", \n" +
-                "}";
+                "- chain-length: " + getLength() + ", \n" +
+                "- latest-hash: " + Encoding.bytesToHex(getTallestHeader().getHash()) + ", \n" +
+                "- is-node-mining: " + isMining() + ", \n" +
+                "- }";
         
     }
    

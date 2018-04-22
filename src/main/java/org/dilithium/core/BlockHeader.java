@@ -25,6 +25,7 @@ import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.serialization.ParcelData;
 import org.dilithium.serialization.Serializer;
 import org.dilithium.util.ByteUtil;
+import org.dilithium.util.Encoding;
 
 /**
  * This class 
@@ -229,5 +230,18 @@ public class BlockHeader { // ~141 bytes
               
         //System.out.println("header parcel length: " + parcel.length);
         return parcel;
+    }
+    
+    @Override
+    public String toString(){
+        return "block-header: {\n" +
+                "- hash: " + Encoding.bytesToHex(getHash()) + ", \n" +
+                "- parent-hash: " + Encoding.bytesToHex(getParentHash()) + ", \n" +
+                "- merkle-root: " + Encoding.bytesToHex(getMerkleRoot()) + ", \n" +
+                "- nonce: " + ByteUtil.bytesToInt(nonce) + ", \n" +
+                "- block-reward: " + reward + ", \n" +
+                "- minerAddress: " + Encoding.bytesToHex(minerAddress) + " \n" +
+                "- }";
+        
     }
 }
