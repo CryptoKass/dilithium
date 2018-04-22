@@ -90,7 +90,7 @@ public class BlockHeader { // ~141 bytes
         this.reward = reward;
         this.minerAddress = minerAddress;
         this.axiomData = axiomData;
-        this.merkleRoot = new byte[] {0,0};
+        this.merkleRoot = new byte[] {0};
     }
     
     public BlockHeader(byte[] parentHash, byte[] blockData, long index, byte[] axiomID){
@@ -98,7 +98,7 @@ public class BlockHeader { // ~141 bytes
         this.blockData = blockData;
         this.index = index;
         this.axiomID = axiomID;
-        this.merkleRoot = new byte[] {0,0};        
+        this.merkleRoot = new byte[] {0};        
     }
     
     public BlockHeader(BlockHeader parent, Axiom axiom){

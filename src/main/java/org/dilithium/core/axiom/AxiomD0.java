@@ -158,7 +158,7 @@ public class AxiomD0 implements Axiom {
         byte[] target = new byte[(int) difficulty];
         target = ByteUtil.populate(target, (byte) 0);
         return Arrays.equals(Arrays.copyOfRange(solution, 0, target.length), target);
-
+        
     }
     
     @Override
