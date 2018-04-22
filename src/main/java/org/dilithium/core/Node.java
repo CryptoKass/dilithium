@@ -41,6 +41,7 @@ public class Node {
         this.context = context;
         this.genesisBlock = genesisBlock;
         this.miner = miner;
+        this.minerWallet = Start.localWallet;
         this.axiom = axiom;
         this.tallestHeader = genesisBlock.header;
     }
@@ -59,6 +60,10 @@ public class Node {
     
     public boolean isMining(){
         return false;
+    }
+    
+    public Context getContext(){
+        return this.context;
     }
     
     @Override
