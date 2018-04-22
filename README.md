@@ -2,10 +2,7 @@
 ---
 [![Build Status](https://travis-ci.org/CryptoKass/dilithium.svg?branch=master)](https://travis-ci.org/CryptoKass/dilithium.svg)
 
-
-Status: Work-In-Progress
-
-A Blockchain developers club community project, for educational purposes.
+A Work-In-Progress Blockchain developers club community project, for educational purposes.
 
 ---
 
