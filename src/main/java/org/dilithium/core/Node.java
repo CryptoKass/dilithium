@@ -36,6 +36,7 @@ public class Node {
     private Miner miner;
     private Axiom axiom;
     private BlockHeader tallestHeader;
+    private boolean shouldMine;
     
     public Node(Context context, Block genesisBlock, Miner miner, Axiom axiom){
         this.context = context;
@@ -51,6 +52,7 @@ public class Node {
         this(Start.localContext,GenesisBlock.getInstance().getBlock(), null, NodeSettings.getDefault().getAxiom() );
     }
     
+    //getters
     public long getLength(){
         return this.context.calculateChainSize()+1;
     }
@@ -67,6 +69,16 @@ public class Node {
         return this.context;
     }
     
+    //Methods
+    public void start(){
+        System.out.println("- Creating new block");
+        Block currentBlock = new Block(tallestHeader, axiom);
+        System.out.println("- Encoding new block");
+        currentBlock.getEncoded();
+        System.out.println("- Done");
+    }
+    
+    //Overrides
     @Override
     public String toString(){
         return "node: {\n" +

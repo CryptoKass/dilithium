@@ -58,6 +58,17 @@ public class Block {
         this.transactions = ByteUtil.parcelDataToListBytes(parcelData[2].getData());
     }
     
+    /* Create a new Block */
+    public Block(BlockHeader parent, Axiom axiom){
+        BlockHeader newHeader = new BlockHeader(parent, axiom);
+        this.header = newHeader;
+        this.axiom = axiom;
+        this.transactions = new ArrayList<byte[]>();
+        //Setup extra header data:
+        this.header.setMerkleRoot(getMerkleRoot());
+        this.header.getDifficulty();     
+    }
+    
     public void addTransaction(Transaction tx){
         if(axiom.verifyTransaction(tx,context)){
             transactions.add(tx.getEncoded());

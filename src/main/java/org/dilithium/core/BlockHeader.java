@@ -20,6 +20,7 @@
 package org.dilithium.core;
 
 import java.math.BigInteger;
+import org.dilithium.Start;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.serialization.ParcelData;
@@ -98,6 +99,21 @@ public class BlockHeader { // ~141 bytes
         this.index = index;
         this.axiomID = axiomID;
         this.merkleRoot = new byte[] {0,0};        
+    }
+    
+    public BlockHeader(BlockHeader parent, Axiom axiom){
+        this.hash = new byte[] {0};
+        this.parentHash = parent.getHash();
+        this.blockData = new byte[] {0};
+        this.timestamp = ByteUtil.getNowTimeStamp();
+        this.difficulty = parent.getDifficulty();
+        this.index = parent.getIndex() + 1;
+        this.nonce = ByteUtil.intToBytes(0);
+        this.axiomID = axiom.getAxiomID();
+        this.reward = parent.getReward();
+        this.minerAddress = Start.localWallet.getAddress();
+        this.axiomData = new byte[] {0};
+        this.merkleRoot = new byte[] {0};
     }
     
     public BlockHeader(byte[] parcel){
