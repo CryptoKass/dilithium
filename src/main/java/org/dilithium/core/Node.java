@@ -20,6 +20,7 @@
 package org.dilithium.core;
 
 import org.dilithium.Start;
+import org.dilithium.cli.Commander;
 import org.dilithium.config.NodeSettings;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.genesis.GenesisBlock;
@@ -29,7 +30,7 @@ import org.dilithium.util.Encoding;
 /**
  * This Class handles the block-chain as a full-node.
  */
-public class Node {
+public class Node implements Runnable{
     private Context context;
     private Block genesisBlock;
     private Wallet minerWallet;
@@ -38,6 +39,8 @@ public class Node {
     private BlockHeader tallestHeader;
     private Block currentBlock;
     private boolean shouldMine;
+    private boolean isRunning;
+    private Thread thread;
     
     public Node(Context context, Block genesisBlock, Miner miner, Axiom axiom){
         this.context = context;
@@ -72,25 +75,44 @@ public class Node {
     
     //Methods
     public void start(){
-        
-        if(currentBlock == null){
-            System.out.println("- Creating new block");
-            currentBlock = new Block(tallestHeader, axiom);
-            System.out.println("- Encoding new block");
-            currentBlock.getEncoded();
-            System.out.println("- Done");
+        if(thread == null){
+            thread = new Thread(this);
         }
         
-        System.out.println("# Mining current Block");
-        this.miner = new Miner(currentBlock);
-        this.miner.setAxiom(axiom);
-        Block minedBlock = this.miner.mineBlock();
-        System.out.println("# Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
-        System.out.println("+ Adding new block to context...");
-        context.putBlock(minedBlock);
-        tallestHeader = minedBlock.header;
-        System.out.println("- Complete");    
+        if(isRunning){
+            Commander.CommanderPrint("Node Already running");
+            return;
+        }
+               
+        shouldMine = true;
+        thread.start();
+        isRunning = false;
+    }
+    
+    
+    private void mine(){
+        isRunning = true;
+        while(shouldMine){
+        
+            if(currentBlock == null){
+                Commander.CommanderPrint("- Creating new block");
+                currentBlock = new Block(tallestHeader, axiom);
+                Commander.CommanderPrint("- Encoding new block");
+                currentBlock.getEncoded();
+                Commander.CommanderPrint("- Done");
+            }
 
+            Commander.CommanderPrint("# Mining current block...");
+            this.miner = new Miner(currentBlock);
+            this.miner.setAxiom(axiom);
+            Block minedBlock = this.miner.mineBlock();
+            Commander.CommanderPrint("# Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
+            Commander.CommanderPrint("+ Adding new block to context...");
+            context.putBlock(minedBlock);
+            tallestHeader = minedBlock.header;
+            Commander.CommanderPrint("- Complete");
+            
+        }
     }
     
     //Overrides
@@ -101,6 +123,11 @@ public class Node {
                 "- latest-hash: " + Encoding.bytesToHex(getTallestHeader().getHash()) + ", \n" +
                 "- is-node-mining: " + isMining() + ", \n" +
                 "- }";
+    }
+
+    @Override
+    public void run() {
+        mine();
     }
     
     
