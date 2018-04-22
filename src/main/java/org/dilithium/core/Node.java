@@ -42,6 +42,7 @@ public class Node {
         this.genesisBlock = genesisBlock;
         this.miner = miner;
         this.axiom = axiom;
+        this.tallestHeader = genesisBlock.header;
     }
     
     public Node(){
@@ -49,7 +50,7 @@ public class Node {
     }
     
     public long getLength(){
-        return this.tallestHeader.getIndex();
+        return this.tallestHeader.getIndex()+1;
     }
     
     public BlockHeader getTallestHeader(){
