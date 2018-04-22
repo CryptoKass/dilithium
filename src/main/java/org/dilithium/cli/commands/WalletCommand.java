@@ -75,6 +75,7 @@ public class WalletCommand implements Command {
             }
         }else if(args[0].equals(params[3])){ //show
             Commander.CommanderPrint(Start.localWallet.toString(Start.localContext));
+            return;
         }else if(args[0].equals(params[4])){ //transaction tx
             String value = args[1];
             String recipient = args[2];

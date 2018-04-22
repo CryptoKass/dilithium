@@ -25,6 +25,7 @@ import java.util.Scanner;
 import org.dilithium.cli.commands.Command;
 import org.dilithium.cli.commands.HelpCommand;
 import org.dilithium.cli.commands.KeyUtilCommand;
+import org.dilithium.cli.commands.NodeCommand;
 import org.dilithium.cli.commands.WalletCommand;
 
 /**
@@ -61,6 +62,7 @@ public class Commander {
         cmds = new HashMap<String,Command>();
         cmds.put("key-util", new KeyUtilCommand());
         cmds.put("wallet", new WalletCommand());
+        cmds.put("node", new NodeCommand());
         cmds.put("-help", new HelpCommand());
         scanner = new Scanner(System.in);
     }
