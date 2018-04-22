@@ -1,5 +1,7 @@
 Dilithium WIP
 ---
+[![Build Status](https://travis-ci.org/CryptoKass/dilithium.svg?branch=master)](https://travis-ci.org/CryptoKass/dilithium.svg)
+
 
 Status: Work-In-Progress
 
