@@ -20,13 +20,11 @@
 package org.dilithium;
 
 import java.security.Security;
-import java.util.Arrays;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dilithium.cli.Commander;
 import org.dilithium.config.NodeSettings;
-import org.dilithium.core.Block;
+import org.dilithium.core.Node;
 import org.dilithium.core.Wallet;
-import org.dilithium.core.genesis.GenesisBlock;
 import org.dilithium.db.Context;
 import org.dilithium.util.KeyUtil;
 
@@ -38,6 +36,7 @@ public class Start {
     public static NodeSettings config;
     public static Wallet localWallet;
     public static Context localContext;
+    public static Node localNode;
     
     /* This method is run when the program first starts */
     public static void main(String[] args) {
@@ -63,6 +62,9 @@ public class Start {
         localWallet = new Wallet();
         System.out.println("\nLocalWallet: " + localWallet.toString(localContext));
        
+        /* Setup local Node */
+        localNode = new Node();
+        System.out.println("\nLocalNode: " + localNode.toString());
         
         /*Test */
         //Setup cli
