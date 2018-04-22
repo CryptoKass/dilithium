@@ -111,6 +111,15 @@ public class Context {
         return this.getBlock(new ByteArrayKey(key));
     }
     
+    public void putBlock(Block block){
+        blocks.put(new ByteArrayKey(block.header.getHash()) , block);
+    }
+    
+    public void saveBlocksToDB(){
+        for( ByteArrayKey key : blocks.keySet() ){
+            Storage.getInstance().put(StorageMaps.BLOCKS, key.toByteArray(), blocks.get(key).getEncoded());
+        }
+    }
     
     //Constructors
     public Context(){
