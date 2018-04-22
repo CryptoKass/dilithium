@@ -14,7 +14,7 @@ Current cli usage:
 - `node start` - begins local node, will build chain and then begin mining.
 - `node stop` - stop the local node from mining.
 - `node show` - show node information.
-- `node show-block _block_hash` - find a block using the a hash.
+- `node show-block _block_hash (-json/-json-raw)` - find a block using the a hash.
 
 Discord: https://discord.gg/ZsyQqyk
 
