@@ -125,6 +125,16 @@ public class Context {
         }
     }
     
+    public long calculateChainSize(){
+        long largestIndex = 0L;
+        long current;
+        for(ByteArrayKey indexKey : blocks.keySet()){
+            current = ByteUtil.bytesToBigInteger(indexKey.toByteArray()).longValue();
+            largestIndex = (current > largestIndex) ? current : largestIndex;
+        }
+        return largestIndex;
+    }
+    
     //Constructors
     public Context(){
         this(null,false);
