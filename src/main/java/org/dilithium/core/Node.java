@@ -89,6 +89,24 @@ public class Node implements Runnable{
         isRunning = false;
     }
     
+    public void stop(){
+        if(thread == null){
+            Commander.CommanderPrint("Node is not running.");
+        }
+        
+        Commander.CommanderPrint("Stoppping node");
+        
+        //Stop the miner:
+        synchronized(this){
+            isRunning = false;
+            shouldMine = false;
+            this.miner.forceStop();
+        }
+        //kill the thread
+        thread.interrupt();
+        thread = null;
+    }
+    
     
     private void mine(){
         isRunning = true;
@@ -106,10 +124,15 @@ public class Node implements Runnable{
             this.miner = new Miner(currentBlock);
             this.miner.setAxiom(axiom);
             Block minedBlock = this.miner.mineBlock();
+            if(minedBlock == null){
+                Commander.CommanderPrint(" Mining interupted !!!");
+                break;
+            }
             Commander.CommanderPrint("# Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
             Commander.CommanderPrint("+ Adding new block to context...");
             context.putBlock(minedBlock);
             tallestHeader = minedBlock.header;
+            currentBlock = null;
             Commander.CommanderPrint("- Complete");
             
         }
@@ -130,7 +153,5 @@ public class Node implements Runnable{
         mine();
     }
     
-    
-   
     
 }

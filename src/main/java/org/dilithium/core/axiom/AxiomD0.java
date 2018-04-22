@@ -67,7 +67,7 @@ public class AxiomD0 implements Axiom {
 
     @Override
     public long calculateDifficulty(BlockHeader header) {
-        int difficulty = 1;
+        int difficulty = 2;
         return difficulty;
     }
 

@@ -36,13 +36,13 @@ public class NodeCommand implements Command {
         return "cmd: node \n" +
                 "- description: Command the local full-node \n" +
                 "- usage: node param [situational...] \n"+
-                "- param: 'start' , 'show', 'show-block' [hash], '-help', '-params' \n"+
+                "- param: 'start' , 'show', 'show-block' [index], 'stop' '-help', '-params' \n"+
                 "------------------------------------------------------------------------";
     }
 
     @Override
     public String[] getParams() {
-        return new String[]{"-help", "-params", "start", "show", "show-block" };
+        return new String[]{"-help", "-params", "start", "show", "show-block","stop" };
     }
 
     @Override
@@ -85,6 +85,12 @@ public class NodeCommand implements Command {
             }
             
             Commander.CommanderPrint("found block: " + block.toString());            
+            return;
+        }
+        
+        if(args[0].equals(params[5])){ //stop
+            Commander.CommanderPrint("Stopping node: ");
+            Start.localNode.stop();
             return;
         }
         

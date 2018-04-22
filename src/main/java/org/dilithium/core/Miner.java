@@ -37,6 +37,8 @@ public class Miner {
     
     private Axiom axiom;
     
+    private boolean shouldMine = false;
+    
     //Constructor:
     public Miner(Block block){
         this.block = block;
@@ -44,6 +46,7 @@ public class Miner {
     }
     
     public Block mineBlock(){
+        shouldMine = true;
         BlockHeader header = block.header;
         //Get difficulty
         long difficulty = header.getDifficulty();
@@ -58,7 +61,7 @@ public class Miner {
         System.out.println("begining mining"); //TODO replace this with a logger
         boolean solved = false;
         
-        while(!solved){
+        while(!solved && shouldMine){
             solution = axiom.generateBlockSolution(header);
             //System.out.println("// nonce: " +  ByteUtil.bytesToInt(header.getNonce()) );
             //System.out.println("// Target:" + Hex.toHexString(target));
@@ -68,10 +71,15 @@ public class Miner {
         System.out.println("- successfully mined!");
         System.out.println("- solution: " + Hex.toHexString(header.getHash()));
         
+        if(!shouldMine) return null;
         return block;
     }
     
     public void setAxiom(Axiom axiom){
         this.axiom = axiom;
+    }
+    
+    public void forceStop(){
+        shouldMine = false;
     }
 }
