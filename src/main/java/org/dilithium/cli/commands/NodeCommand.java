@@ -66,16 +66,17 @@ public class NodeCommand implements Command {
         }
         
         if(args[0].equals(params[4])){ //show-block
-            String key = args[1] ;
-            if(key == null){
-                Commander.CommanderPrint("ERROR ! no key included");
+            String indexString = args[1] ;
+            if(indexString == null){
+                Commander.CommanderPrint("ERROR ! no index included");
                 return;
             }
             
             Commander.CommanderPrint("fetching block...");
-            Commander.CommanderPrint("searching for block with key: " + key);          
+            Commander.CommanderPrint("searching for block with index: " + indexString);          
             Context context = Start.localNode.getContext();
-            Block block = context.getBlock(Encoding.hexToBytes(key));
+            long index = Long.parseLong(indexString);
+            Block block = context.getBlock(index);
             
             if(block == null) {
                 Commander.CommanderPrint("ERROR ! block not found.");

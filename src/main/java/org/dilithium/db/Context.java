@@ -19,12 +19,14 @@
 
 package org.dilithium.db;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import org.dilithium.core.AccountState;
 import org.dilithium.core.Block;
 import org.dilithium.core.BlockHeader;
 import org.dilithium.core.Transaction;
 import org.dilithium.util.ByteArrayKey;
+import org.dilithium.util.ByteUtil;
 
 /**
  * This class 
@@ -107,12 +109,14 @@ public class Context {
         return null;     
     }
     
-    public Block getBlock(byte[] key){
+    public Block getBlock(long index){
+        byte[] key = ByteUtil.bigIntegerToBytes(BigInteger.valueOf(index));
         return this.getBlock(new ByteArrayKey(key));
     }
     
     public void putBlock(Block block){
-        blocks.put(new ByteArrayKey(block.header.getHash()) , block);
+        byte[] indexBytes = ByteUtil.bigIntegerToBytes( BigInteger.valueOf(block.header.getIndex()));
+        blocks.put(new ByteArrayKey(indexBytes) , block);
     }
     
     public void saveBlocksToDB(){

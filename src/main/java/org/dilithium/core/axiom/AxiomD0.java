@@ -167,7 +167,7 @@ public class AxiomD0 implements Axiom {
         
         //Get Block header and parent hash:
         BlockHeader header = block.header;
-        Block parent = context.getBlock(header.getParentHash());
+        Block parent = context.getBlock(header.getIndex());
         BlockHeader parentHeader;
         
         //Check the header exists...
