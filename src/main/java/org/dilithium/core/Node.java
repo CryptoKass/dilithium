@@ -111,7 +111,8 @@ public class Node implements Runnable{
     private void mine(){
         isRunning = true;
         while(shouldMine){
-        
+            
+            //if no current block exists - create a new one
             if(currentBlock == null){
                 Commander.CommanderPrint("- Creating new block");
                 currentBlock = new Block(tallestHeader, axiom);
@@ -119,19 +120,30 @@ public class Node implements Runnable{
                 currentBlock.getEncoded();
                 Commander.CommanderPrint("- Done");
             }
-
+            
+            //Setup Miner
             Commander.CommanderPrint("# Mining current block...");
             this.miner = new Miner(currentBlock);
             this.miner.setAxiom(axiom);
+            
+            //Begin mining the block
             Block minedBlock = this.miner.mineBlock();
             if(minedBlock == null){
                 Commander.CommanderPrint(" Mining interupted !!!");
                 break;
             }
+            
+            //block has been mined
             Commander.CommanderPrint("# Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
             Commander.CommanderPrint("+ Adding new block to context...");
+            
+            //Add mined block to db:
             context.putBlock(minedBlock);
+            
+            //Update tallest header:
             tallestHeader = minedBlock.header;
+            
+            //Reset current Block
             currentBlock = null;
             Commander.CommanderPrint("- Complete");
             
