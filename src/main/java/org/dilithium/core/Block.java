@@ -98,6 +98,11 @@ public class Block {
         ArrayList<byte[]> layer = new ArrayList<byte[]>();
         ArrayList<byte[]> layerchild = new ArrayList<byte[]>();
         
+        //check if transactions exist populated:
+        if(nodes == 0){
+            return HashUtil.applyBlake2b(new byte[]{0});
+        }
+        
         //generate bottom level
         for(int i=0; i < nodes -1; i+= 2){
             nodeA = new Transaction(transactions.get(i)).getHash();

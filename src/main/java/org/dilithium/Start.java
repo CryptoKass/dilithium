@@ -65,6 +65,7 @@ public class Start {
         /* Setup local Node */
         localNode = new Node();
         System.out.println("\nLocalNode: " + localNode.toString());
+        localNode.start();
         
         /*Test */
         //Setup cli
