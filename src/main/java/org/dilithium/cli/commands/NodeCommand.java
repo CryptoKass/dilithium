@@ -48,7 +48,7 @@ public class NodeCommand implements Command {
     }
 
     @Override
-    public void run(String[] args) throws IOException {
+    public void run(String[] args) {
         if( !Arrays.asList(getParams()).contains(args[0]) ){
             Commander.CommanderPrint("ERROR ! unknown parameters...");
             Commander.CommanderPrint(Arrays.toString(getParams()));
@@ -106,7 +106,12 @@ public class NodeCommand implements Command {
         
         if(args[0].equals(params[5])){ //stop
             Commander.CommanderPrint("Stopping node: ");
-            Start.localNode.stop();
+            try {
+				Start.localNode.stop();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             return;
         }
         
