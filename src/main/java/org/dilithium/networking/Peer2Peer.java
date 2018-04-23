@@ -20,10 +20,8 @@ public class Peer2Peer {
 
 	private int port;
     private ArrayList<Peer>  peers;
-    private DataInputStream  inputStream;
     private DataOutputStream outputStream;
-    private Thread           serverThread;
-    private Thread           clientThread;
+    public 	Thread           serverThread;
     private boolean          runningServer;
     private HashMap<String, NetworkCommand> commands = new HashMap<>();
     private ServerSocket server;
@@ -38,15 +36,12 @@ public class Peer2Peer {
                 try {
                     listen();
                     System.out.println("Connection Ended");
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });		
-        
         initializeCommands();
-
     }
     
     
@@ -64,7 +59,6 @@ public class Peer2Peer {
     }
 
     public void stop() throws IOException{
-    		Thread t = Thread.currentThread();    		
     		runningServer = false;
     		try {
         		serverThread.interrupt();
@@ -83,7 +77,6 @@ public class Peer2Peer {
         Peer peer;
         server.setSoTimeout(10000);
         while(runningServer){
-        		//System.out.println("Waiting for a connection");
         		try{
         			socket = server.accept();
                 System.out.println("Passed Accept");
@@ -102,8 +95,6 @@ public class Peer2Peer {
     public void connect(Socket socket){
         try {
             outputStream = new DataOutputStream(socket.getOutputStream());
-            inputStream = new DataInputStream(socket.getInputStream());
-            //System.out.println("Sending Message");
             Peer.send("ping", outputStream);		
         } catch (IOException e) {
             //e.printStackTrace();

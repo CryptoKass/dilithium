@@ -1,5 +1,5 @@
 package org.dilithium.networking.Commands;
 
-public class PingCommandHandler {
+public class PingCommandHandler extends NetworkCommand{
 
 }

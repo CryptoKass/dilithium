@@ -19,6 +19,7 @@
 
 package org.dilithium.cli.commands;
 
+import java.io.IOException;
 import java.util.Arrays;
 import org.dilithium.Start;
 import org.dilithium.cli.Commander;
@@ -47,7 +48,7 @@ public class NodeCommand implements Command {
     }
 
     @Override
-    public void run(String[] args) {
+    public void run(String[] args) throws IOException {
         if( !Arrays.asList(getParams()).contains(args[0]) ){
             Commander.CommanderPrint("ERROR ! unknown parameters...");
             Commander.CommanderPrint(Arrays.toString(getParams()));
