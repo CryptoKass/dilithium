@@ -19,12 +19,15 @@
 
 package org.dilithium.core;
 
+import java.io.IOException;
+
 import org.dilithium.Start;
 import org.dilithium.cli.Commander;
 import org.dilithium.config.NodeSettings;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.genesis.GenesisBlock;
 import org.dilithium.db.Context;
+import org.dilithium.networking.Peer2Peer;
 import org.dilithium.util.Encoding;
 
 /**
@@ -40,7 +43,9 @@ public class Node implements Runnable{
     private Block currentBlock;
     private boolean shouldMine;
     private boolean isRunning;
-    private Thread thread;
+    private Thread miningThread;
+    private Peer2Peer p2p;
+    private final int DEFAULT_PORT = 8888;
     
     public Node(Context context, Block genesisBlock, Miner miner, Axiom axiom){
         this.context = context;
@@ -75,22 +80,27 @@ public class Node implements Runnable{
     
     //Methods
     public void start(){
-        if(thread == null){
-            thread = new Thread(this);
+        if(miningThread == null){
+            miningThread = new Thread(this);
+        }
+        
+        if(p2p == null) {
+        		p2p = new Peer2Peer(DEFAULT_PORT);
         }
         
         if(isRunning){
             Commander.CommanderPrint("Node Already running");
             return;
         }
-               
+        
+        p2p.start();
         shouldMine = true;
-        thread.start();
+        miningThread.start();
         isRunning = false;
     }
     
-    public void stop(){
-        if(thread == null){
+    public void stop() throws IOException{
+        if(miningThread == null){
             Commander.CommanderPrint("Node is not running.");
         }
         
@@ -103,8 +113,9 @@ public class Node implements Runnable{
             this.miner.forceStop();
         }
         //kill the thread
-        thread.interrupt();
-        thread = null;
+        p2p.stop();
+        miningThread.interrupt();
+        miningThread = null;
     }
     
     

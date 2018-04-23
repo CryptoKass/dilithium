@@ -19,6 +19,7 @@
 
 package org.dilithium.cli.commands;
 
+import java.io.IOException;
 import java.util.Arrays;
 import org.dilithium.Start;
 import org.dilithium.cli.Commander;
@@ -105,7 +106,12 @@ public class NodeCommand implements Command {
         
         if(args[0].equals(params[5])){ //stop
             Commander.CommanderPrint("Stopping node: ");
-            Start.localNode.stop();
+            try {
+				Start.localNode.stop();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             return;
         }
         
