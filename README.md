@@ -2,7 +2,8 @@
 ---
 [![Build Status](https://travis-ci.org/CryptoKass/dilithium.svg?branch=master)](https://travis-ci.org/CryptoKass/dilithium.svg)
 
-A Blockchain developers club community project, for educational purposes. Still a Work-In-Progress. No official release.
+A Blockchain developers club community project, for educational purposes. Still a Work-In-Progress. No official release.<br>
+To Find out more about what we are aiming to achieve please read our [vision page](https://github.com/CryptoKass/dilithium/wiki/Vision).
 
 ---
 
