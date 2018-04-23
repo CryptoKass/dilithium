@@ -1,25 +1,2 @@
 /target/
 /bin/
-
-# Eclipse
-.project
-.classpath
-.settings/
-bin
-
-# IDEA
-.idea
-!.idea/codeStyleSettings.xml
-*.iml
-*.iws
-
-# Maven
-*.log
-log/
-target/
-
-**/user.conf
-
-# Netbeans
-nbactions.xml
-nb-configuration.xml
