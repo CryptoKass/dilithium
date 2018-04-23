@@ -21,3 +21,5 @@ target/
 **/user.conf
 
 # Netbeans
+nbactions.xml
+nb-configuration.xml
