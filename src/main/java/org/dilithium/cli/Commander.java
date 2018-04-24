@@ -22,6 +22,8 @@ package org.dilithium.cli;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.logging.Level;
+
 import org.dilithium.cli.commands.Command;
 import org.dilithium.cli.commands.HelpCommand;
 import org.dilithium.cli.commands.KeyUtilCommand;
@@ -29,6 +31,7 @@ import org.dilithium.cli.commands.NodeCommand;
 import org.dilithium.cli.commands.PingCommand;
 import org.dilithium.cli.commands.SetDebugModeCommand;
 import org.dilithium.cli.commands.WalletCommand;
+import org.dilithium.util.Log;
 
 /**
  * This class 
@@ -116,11 +119,11 @@ public class Commander {
     
     /* Standard commander print method. */
     public static void CommanderPrint(String msg){
-        System.out.println("- " + msg);
+        Log.log(Level.INFO, "- " + msg);
     }
     /* Commander print method for inputs. */
     public static String CommanderInput(String msg){
-        System.out.print("" + msg + ": ");
+        Log.log(Level.INFO, "" + msg + ": ");
         return null;
     }
     

@@ -20,11 +20,14 @@
 package org.dilithium.core;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+
 import org.bouncycastle.util.encoders.Hex;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.db.Context;
 import org.dilithium.util.ByteUtil;
+import org.dilithium.util.Log;
 
 /**
  * This class 
@@ -57,8 +60,8 @@ public class Miner {
         
         //cache for solution
         byte[] solution;
-        
-        System.out.println("begining mining"); //TODO replace this with a logger
+
+        Log.log(Level.INFO, "beginning mining");
         boolean solved = false;
         
         while(!solved && shouldMine){
@@ -68,8 +71,8 @@ public class Miner {
             //System.out.println("// attempt: " + Hex.toHexString(Arrays.copyOfRange(solution, 0, target.length)));
             solved = Arrays.equals(Arrays.copyOfRange(solution, 0, target.length), target);
         }
-        System.out.println("- successfully mined!");
-        System.out.println("- solution: " + Hex.toHexString(header.getHash()));
+        Log.log(Level.INFO, "- successfully mined!");
+        Log.log(Level.INFO, "- solution: " + Hex.toHexString(header.getHash()));
         
         if(!shouldMine) return null;
         return block;

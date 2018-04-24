@@ -20,6 +20,7 @@
 package org.dilithium.util;
 
 import java.security.MessageDigest;
+import java.util.logging.Level;
 
 /**
  * This class contains helpers for the hashing algorithms
@@ -53,7 +54,7 @@ public class HashUtil {
             byte[] hash = digest.digest(input);
             return hash;
         }catch(Exception e){
-            System.out.println(e);
+            Log.log(Level.WARNING, e.getMessage());
             return null;
         }
     }

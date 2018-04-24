@@ -20,6 +20,8 @@
 package org.dilithium;
 
 import java.security.Security;
+import java.util.logging.Level;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dilithium.cli.Commander;
 import org.dilithium.config.NodeSettings;
@@ -27,6 +29,7 @@ import org.dilithium.core.Node;
 import org.dilithium.core.Wallet;
 import org.dilithium.db.Context;
 import org.dilithium.util.KeyUtil;
+import org.dilithium.util.Log;
 
 /**
  * This is the class that is run when the program is started.
@@ -40,9 +43,7 @@ public class Start {
     
     /* This method is run when the program first starts */
     public static void main(String[] args) {
-        System.out.println("-----------------------------------------");
-        System.out.println("Dilithium core is starting up: ");
-        System.out.println("-----------------------------------------");
+        Log.sendStartupMessage();
         
         /* Set default settings */
         config = NodeSettings.getDefault();
@@ -55,22 +56,20 @@ public class Start {
         
         /* Get local database and storage context 
          * will contain the local state of blocks and accounts*/
-        localContext = new Context(); 
-        System.out.println("\nLocalContext: " + localContext.toString());
+        localContext = new Context();
+        Log.log(Level.INFO, "\nLocalContext: " + localContext.toString());
         
         /* Setup temp local wallet */
         localWallet = new Wallet();
-        System.out.println("\nLocalWallet: " + localWallet.toString(localContext));
+        Log.log(Level.INFO, "\nLocalWallet: " + localWallet.toString(localContext));
        
         /* Setup local Node */
         localNode = new Node();
-        System.out.println("\nLocalNode: " + localNode.toString());
+        Log.log(Level.INFO, "\nLocalNode: " + localNode.toString());
         
         /*Test */
         //Setup cli
-        System.out.println("\n-----------------------------------------");
-        System.out.println("Dilithium cli is starting up: ");
-        System.out.println("-----------------------------------------");
+        Log.sendCLIStartupMessage();
         
         Commander commander = new Commander();
         commander.listen();

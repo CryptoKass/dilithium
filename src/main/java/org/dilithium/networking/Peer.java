@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Dilithium Team .
  *
  * The Dilithium library is free software; you can redistribute it and/or
@@ -28,11 +28,13 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
+import org.dilithium.util.Log;
 
 
 public class Peer {
@@ -50,7 +52,7 @@ public class Peer {
 			public void run() {
                 try {
                     listen();
-                    System.out.println("Closing connection to " + socket.getInetAddress() + ":" + socket.getPort());
+                    Log.log(Level.INFO, "Closing connection to " + socket.getInetAddress() + ":" + socket.getPort());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -103,7 +105,7 @@ public class Peer {
     }
 
     public static void send(String data, DataOutputStream out){
-        System.out.println("Sending message: " + data);
+        Log.log(Level.INFO, "Sending message: " + data);
         try {
             out.writeUTF(data);
             out.flush();
@@ -116,7 +118,7 @@ public class Peer {
         String data = null;
         try {
             data = in.readUTF();
-            System.out.println("Received message: "+data);
+            Log.log(Level.INFO, "Received message: " + data);
         } catch (IOException e) {
             e.printStackTrace();
         }
