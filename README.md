@@ -17,6 +17,8 @@ Current cli usage:
 - `node stop` - stop the local node from mining.
 - `node show` - show node information.
 - `node show-block _block_hash (-json/-json-raw)` - find a block using the a hash.
+- `node port (_new_port)` - view or set a new port number for the local node.
+- `debug-cli true/false` - turn on cli-debug mode.
 
 ---
 
