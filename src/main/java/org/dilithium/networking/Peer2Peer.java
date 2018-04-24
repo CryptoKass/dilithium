@@ -9,11 +9,13 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
+import org.dilithium.util.Log;
 
 
 public class Peer2Peer {
@@ -35,7 +37,7 @@ public class Peer2Peer {
             public void run() {
                 try {
                     listen();
-                    System.out.println("Connection Ended");
+                    Log.log(Level.INFO, "Connection Ended");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -51,7 +53,7 @@ public class Peer2Peer {
 
     public void start(){
         if(serverThread.isAlive()){
-            System.out.println("Server is already running.");
+            Log.log(Level.INFO, "Server is already running.");
             return;
         }
         runningServer = true;
@@ -66,24 +68,24 @@ public class Peer2Peer {
         } catch (NullPointerException n) {
         		n.printStackTrace();
         }
-        System.out.println("Server Stopped");
+        Log.log(Level.INFO, "Server Stopped");
     }
 
     public void listen() throws IOException, SocketTimeoutException{
-        System.out.println("Server starting...");
+        Log.log(Level.INFO, "Server starting...");
         server = new ServerSocket(this.port);
-        System.out.println("Server started on port " + this.port);
+        Log.log(Level.INFO, "Server started on port " + this.port);
         	
         Peer peer;
         server.setSoTimeout(10000);
         while(runningServer){
         		try{
         			socket = server.accept();
-                System.out.println("Passed Accept");
+                Log.log(Level.INFO, "Passed Accept");
                 peer = new Peer(socket);
-                System.out.println("Connection received from: " + peer.toString());
+                Log.log(Level.INFO, "Connection received from: " + peer.toString());
                 peers.add(peer);
-                System.out.println("New peer: " + peer.toString());
+                Log.log(Level.INFO, "New peer: " + peer.toString());
         		} catch (SocketTimeoutException e) {
         			//e.printStackTrace();
         		}

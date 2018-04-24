@@ -24,12 +24,15 @@ import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dilithium.config.NodeSettings;
 import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.HashUtil;
 import org.dilithium.util.KeyUtil;
+import org.dilithium.util.Log;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,13 +68,13 @@ public class BlockTest {
 
         Block originalBlock = new Block(header,AxiomManager.getAxiom("axiomD0"), txs);
         byte[] encodedBlock = originalBlock.getEncoded();
-        
-        System.out.println("block encoded + " + encodedBlock.length);
+
+        Log.log(Level.INFO, "block encoded + " + encodedBlock.length);
         
         Block otherBlock = new Block(encodedBlock);
         byte[] otherEncodedBlock = otherBlock.getEncoded();
-        
-        System.out.println("block encoded + " + encodedBlock.length);
+
+        Log.log(Level.INFO, "block encoded + " + encodedBlock.length);
         
         Assert.assertTrue("Block Encoding & Decoding Failed ",Arrays.equals(otherEncodedBlock,encodedBlock));
     }

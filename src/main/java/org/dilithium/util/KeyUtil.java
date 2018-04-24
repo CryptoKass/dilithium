@@ -79,7 +79,7 @@ public class KeyUtil {
             isSetup = true;      
         } catch (Exception e) {
             //TODO notify...
-            System.err.println(e);
+            Log.log(Level.WARNING, e.getMessage());
         }
     }
     
@@ -92,7 +92,7 @@ public class KeyUtil {
             return newKeyPair;
         } catch (Exception e) {
             //TODO notify...
-            System.err.println(e);
+            Log.log(Level.WARNING, e.getMessage());
             return null;
         }
     }
@@ -102,8 +102,8 @@ public class KeyUtil {
         try {
             return getPublicKey(privateKey);
         } catch (Exception e) {
-            System.out.println("privatekey decode failed");
-            System.err.println(e);
+            Log.log(Level.WARNING, "privatekey decode failed");
+            Log.log(Level.WARNING, e.getMessage());
             return null;
         }
     }
@@ -124,8 +124,8 @@ public class KeyUtil {
             ECPublicKeySpec pubSpec = new ECPublicKeySpec (point, ecSpec);
             return (ECPublicKey) kf.generatePublic(pubSpec);
         } catch (InvalidKeySpecException e) {
-            System.out.println("publickey decode failed");
-            System.err.println(e);
+            Log.log(Level.WARNING, "publickey decode failed");
+            Log.log(Level.WARNING, e.getMessage());
             return null;
         }
     }
@@ -137,8 +137,8 @@ public class KeyUtil {
             ECPrivateKeySpec privSpec = new ECPrivateKeySpec(s,ecSpec);
             return (ECPrivateKey) kf.generatePrivate(privSpec);
         } catch (InvalidKeySpecException e) {
-            System.out.println("privatekey decode failed");
-            System.err.println(e);
+            Log.log(Level.WARNING, "privatekey decode failed");
+            Log.log(Level.WARNING, e.getMessage());
             return null;
         }
     }

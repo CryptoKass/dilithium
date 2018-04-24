@@ -20,7 +20,10 @@
 package org.dilithium.core.axiom;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+
 import org.dilithium.util.ByteArrayKey;
+import org.dilithium.util.Log;
 
 /**
  * This class 
@@ -52,7 +55,7 @@ public class AxiomManager {
         axiomKeys.put( "axiomD0", axiomD0);
         
         isPopulated = true;
-        System.out.println("Axioms populated");        
+        Log.log(Level.INFO, "Axioms populated");
     }
     
 }
