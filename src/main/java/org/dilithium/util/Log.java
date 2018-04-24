@@ -12,16 +12,16 @@ public class Log
 
     public static void sendStartupMessage()
     {
-        LOGGER.log(Level.INFO, "-----------------------------------------");
-        LOGGER.log(Level.INFO, "Dilithium core is starting up: ");
-        LOGGER.log(Level.INFO, "-----------------------------------------");
+        LOGGER.log(Level.INFO, "\n-----------------------------------------\n"
+                             + "Dilithium core is starting up: \n"
+                             + "-------------------------------------------");
     }
 
     public static void sendCLIStartupMessage()
     {
-        LOGGER.log(Level.INFO, "\n-----------------------------------------");
-        LOGGER.log(Level.INFO, "Dilithium cli is starting up: ");
-        LOGGER.log(Level.INFO, "-------------------------------------------");
+        LOGGER.log(Level.INFO, "\n-----------------------------------------\n"
+                             + "Dilithium cli is starting up: \n"
+                             + "-------------------------------------------");
     }
 
     public static void log(Level level, String message)
