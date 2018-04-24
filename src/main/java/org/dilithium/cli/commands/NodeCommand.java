@@ -44,7 +44,7 @@ public class NodeCommand implements Command {
 
     @Override
     public String[] getParams() {
-        return new String[]{"-help", "-params", "start", "show", "show-block","stop" };
+        return new String[]{"-help", "-params", "start", "show", "show-block", "stop", "port" };
     }
 
     @Override
@@ -115,17 +115,27 @@ public class NodeCommand implements Command {
             return;
         }
         
-        
-        
-        if(args[0].equals(params[0])){ //help
-            Commander.CommanderPrint(getHelp());
+        if(args[0].equals(params[6])){ //port
+                    
+            if(args.length < 2){
+                Commander.CommanderPrint("port: "+ Start.localNode.getPort());
+                return;
+            }
+            
+            String newPort = args[1];
+            
+            int port = Integer.parseUnsignedInt(newPort);
+            if(port == 0){
+                Commander.CommanderPrint("ERROR ! invalid new port.");
+                return;
+            }
+            
+            Start.localNode.setPort(port);
+            Commander.CommanderPrint("New port set for local node.");
+            Commander.CommanderPrint("port: " + newPort);
             return;
         }
         
-        if(args[0].equals(params[1])){ //params
-            Commander.CommanderPrint(Arrays.toString(getParams()));
-            return;
-        }
         
         Commander.CommanderPrint("Sorry param not yet implemented");
         

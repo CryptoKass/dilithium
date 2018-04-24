@@ -27,6 +27,7 @@ import org.dilithium.cli.commands.HelpCommand;
 import org.dilithium.cli.commands.KeyUtilCommand;
 import org.dilithium.cli.commands.NodeCommand;
 import org.dilithium.cli.commands.PingCommand;
+import org.dilithium.cli.commands.SetDebugModeCommand;
 import org.dilithium.cli.commands.WalletCommand;
 
 /**
@@ -37,23 +38,19 @@ public class Commander {
     public HashMap<String,Command> cmds;
     public Scanner scanner;
     public static Commander instance;
+    public static boolean debugMode = false;
     
     /* we get the command object from cmds and call command.run(args)*/
     public void call(String[] rawArgs){
-        try{
-            String function = rawArgs[0];
-            String[] args = Arrays.copyOfRange(rawArgs, 1,rawArgs.length);
+     
+        String function = rawArgs[0];
+        String[] args = Arrays.copyOfRange(rawArgs, 1,rawArgs.length);
 
-            Command command = cmds.get(function);
-            if(command == null){        
-                CommanderPrint("command function: '" + function +"' not found. Type -help for a list of functions");
-            }else{
-                command.run(args);
-            }
-        }catch(ArrayIndexOutOfBoundsException e){
-            CommanderPrint("command couldn't execute, perhaps not enough arguments? try: "+ rawArgs[0] + " -help");
-        }catch(Exception e){
-            CommanderPrint("command failed to execute.");
+        Command command = cmds.get(function);
+        if(command == null){        
+            CommanderPrint("command function: '" + function +"' not found. Type -help for a list of functions");
+        }else{
+            command.run(args);
         }
              
     }
@@ -65,6 +62,7 @@ public class Commander {
         cmds.put("wallet", new WalletCommand());
         cmds.put("node", new NodeCommand());
         cmds.put("ping", new PingCommand());
+        cmds.put("debug-cli", new SetDebugModeCommand());
         cmds.put("-help", new HelpCommand());
         scanner = new Scanner(System.in);
     }
@@ -72,16 +70,33 @@ public class Commander {
     /* uses a scanner to get input from the user, we check if cmd was quit first then call(args). */
     public void listen(){
         while(true){
+            //Display input message:
             CommanderInput("dilithium-cli");
+            //Gather user input:
             String rawInput = (String) scanner.nextLine();
             
+            //check if the users wishes to quit
             if(rawInput.equals("quit") || rawInput.equals("exit")){
                 break;
             }
+            
+            //Gather the raw arguments entered by the user
             String[] rawArgs = rawInput.split("\\s+");
-
+            
+            //check any command or argument was entered
             if(!rawArgs[0].equals("")){
-                call(rawArgs);
+                /* Check if debug mode is false, if so then run command in try catch to aviod crashing the application if an error is thrown */
+                if(debugMode == false){
+                    try{
+                        call(rawArgs);
+                    }catch(ArrayIndexOutOfBoundsException e){
+                        CommanderPrint("command couldn't execute, perhaps not enough arguments? try: "+ rawArgs[0] + " -help");
+                    }catch(Exception e){
+                        CommanderPrint("command failed to execute.");
+                    }
+                }else{ //Otherwise run the command with no saftey net.
+                    call(rawArgs);
+                }
             }
         }
     }

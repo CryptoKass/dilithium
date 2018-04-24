@@ -34,19 +34,37 @@ import org.dilithium.util.Encoding;
  * This Class handles the block-chain as a full-node.
  */
 public class Node implements Runnable{
+    /* The storage and db context used by this node */
     private Context context;
+    
+    /* The first block in the blockchain, via context */
     private Block genesisBlock;
+    
+    /* The wallet that will recieve rewards for each block mined (If the current axiom supports that */ 
     private Wallet minerWallet;
+    
+    /* The Miner class handles PoW mining */
     private Miner miner;
+    
+    /* The current axiom in use by the latest block in the blockchain */
     private Axiom axiom;
+    
+    /* The header from the latest block in the blockchain, via context. */
     private BlockHeader tallestHeader;
+    
+    /* The block that is being mined */
     private Block currentBlock;
+    
+    /* Node and mining status variables: */
     private boolean shouldMine;
     private boolean isRunning;
     private Thread miningThread;
-    private Peer2Peer p2p;
-    private final int DEFAULT_PORT = 8888;
     
+    /* This nodes peer to peer variables */
+    private Peer2Peer p2p;
+    private int serverPort = 8888;
+    
+    //Contructor 
     public Node(Context context, Block genesisBlock, Miner miner, Axiom axiom){
         this.context = context;
         this.genesisBlock = genesisBlock;
@@ -66,12 +84,16 @@ public class Node implements Runnable{
         return this.context.calculateChainSize()+1;
     }
     
+    public int getPort(){
+        return this.serverPort;
+    }
+    
     public BlockHeader getTallestHeader(){
         return this.tallestHeader;
     }
     
     public boolean isMining(){
-        return false;
+        return this.isRunning && this.shouldMine;
     }
     
     public Context getContext(){
@@ -85,7 +107,7 @@ public class Node implements Runnable{
         }
         
         if(p2p == null) {
-        		p2p = new Peer2Peer(DEFAULT_PORT);
+        		p2p = new Peer2Peer(serverPort);
         }
         
         if(isRunning){
@@ -117,8 +139,7 @@ public class Node implements Runnable{
         miningThread.interrupt();
         miningThread = null;
     }
-    
-    
+        
     private void mine(){
         isRunning = true;
         while(shouldMine){
@@ -159,6 +180,10 @@ public class Node implements Runnable{
             Commander.CommanderPrint("- Complete");
             
         }
+    }
+    
+    public void setPort(int number){
+        this.serverPort = serverPort;
     }
     
     //Overrides
