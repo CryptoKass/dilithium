@@ -104,7 +104,6 @@ public class Wallet {
         //Transaction(ECPrivateKey privateKey, byte[] nonce, byte[] value, byte[] data, byte[] recipient, byte networkId, byte[] sender, Axiom axiom)
         
         return tx;
-        
     }
     
 }

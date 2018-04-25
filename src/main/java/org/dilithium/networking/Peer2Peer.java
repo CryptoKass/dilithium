@@ -66,7 +66,7 @@ public class Peer2Peer {
         		serverThread.interrupt();
     			socket.close();
         } catch (NullPointerException n) {
-        		n.printStackTrace();
+        		Log.log(Level.WARNING, "Null pointer when closing server socket");
         }
         Log.log(Level.INFO, "Server Stopped");
     }

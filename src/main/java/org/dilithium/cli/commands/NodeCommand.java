@@ -26,7 +26,6 @@ import org.dilithium.cli.Commander;
 import org.dilithium.core.Block;
 import org.dilithium.db.Context;
 import org.dilithium.serialization.Json;
-import org.dilithium.util.Encoding;
 
 /**
  * This class 
@@ -86,7 +85,7 @@ public class NodeCommand implements Command {
                 return;
             }
             
-            if(args[2] != null){
+            if(args.length >= 3){
                 if(args[2].equals("-json")){
                     Commander.CommanderPrint("found block: " + Json.createJsonPretty(block));            
                     return;

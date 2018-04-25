@@ -66,7 +66,7 @@ public class Miner {
         
         while(!solved && shouldMine){
             solution = axiom.generateBlockSolution(header);
-            //System.out.println("// nonce: " +  ByteUtil.bytesToInt(header.getNonce()) );
+            //System.out.println("// nonce: " +  ByteUtil.bytesToBigInteger(header.getNonce()) );
             //System.out.println("// Target:" + Hex.toHexString(target));
             //System.out.println("// attempt: " + Hex.toHexString(Arrays.copyOfRange(solution, 0, target.length)));
             solved = Arrays.equals(Arrays.copyOfRange(solution, 0, target.length), target);

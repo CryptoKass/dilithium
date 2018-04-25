@@ -21,6 +21,7 @@ package org.dilithium.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.dilithium.Start;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.db.Context;
@@ -66,7 +67,8 @@ public class Block {
         this.transactions = new ArrayList<byte[]>();
         //Setup extra header data:
         this.header.setMerkleRoot(getMerkleRoot());
-        this.header.getDifficulty();     
+        this.header.getDifficulty();
+        this.context = Start.localContext;
     }
     
     public void addTransaction(Transaction tx){
@@ -74,10 +76,6 @@ public class Block {
             transactions.add(tx.getEncoded());
             header.setMerkleRoot(getMerkleRoot());
         }
-    }
-    
-    private void addTransaction(byte[] tx){
-        transactions.add(tx);
     }
     
     public int getTransactionLength(){
@@ -101,6 +99,11 @@ public class Block {
         //check if transactions exist populated:
         if(nodes == 0){
             return HashUtil.applyBlake2b(new byte[]{0});
+        }
+        
+        //check for single tx
+        if(nodes == 1){
+            return HashUtil.applyBlake2b(transactions.get(0));
         }
         
         //generate bottom level

@@ -68,7 +68,8 @@ public class Context {
         }
         
         //otherwise account doesnt exist in the current context.
-        return null;        
+        //create a fresh account state
+        return new AccountState();
     }
     
     public void putAccount(ByteArrayKey addressKey, AccountState account){
@@ -132,7 +133,7 @@ public class Context {
             current = ByteUtil.bytesToBigInteger(indexKey.toByteArray()).longValue();
             largestIndex = (current > largestIndex) ? current : largestIndex;
         }
-        return largestIndex;
+        return largestIndex + 1;
     }
     
     //Constructors
