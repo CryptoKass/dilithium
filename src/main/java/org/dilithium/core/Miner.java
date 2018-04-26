@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.bouncycastle.util.encoders.Hex;
+import org.dilithium.cli.Commander;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.db.Context;

@@ -147,7 +147,6 @@ public class Node implements Runnable{
         }
         //kill the thread
         p2p.stop();
-        p2p = null;
         miningThread.interrupt();
         miningThread = null;
     }
@@ -157,32 +156,32 @@ public class Node implements Runnable{
             
             //if no current block exists - create a new one
             if(currentBlock == null){
-                Commander.CommanderPrint("- Creating new block");
+                Commander.CommanderPrint("Creating new block");
                 currentBlock = new Block(tallestHeader, axiom);
                 //add transactions to block from the transaction pool
                 while(!transactionPool.isEmpty()){
                     currentBlock.addTransaction(transactionPool.remove());
                 }
-                Commander.CommanderPrint("- Encoding new block");
+                Commander.CommanderPrint("Encoding new block");
                 currentBlock.getEncoded();
-                Commander.CommanderPrint("- Done");
+                Commander.CommanderPrint("Done");
             }
             
             //Setup Miner
-            Commander.CommanderPrint("# Mining current block...");
+            Commander.CommanderPrint("Mining current block...");
             this.miner = new Miner(currentBlock);
             this.miner.setAxiom(axiom);
             
             //Begin mining the block
             Block minedBlock = this.miner.mineBlock();
             if(minedBlock == null){
-                Commander.CommanderPrint(" Mining interupted !!!");
+                Commander.CommanderPrint("Mining interupted !!!");
                 break;
             }
             
             //block has been mined
-            Commander.CommanderPrint("# Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
-            Commander.CommanderPrint("+ Adding new block to context...");
+            Commander.CommanderPrint("Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
+            Commander.CommanderPrint("Adding new block to context...");
             
             //Add mined block to db:
             //context.putBlock(minedBlock);
@@ -193,13 +192,17 @@ public class Node implements Runnable{
             
             //Reset current Block
             currentBlock = null;
-            Commander.CommanderPrint("- Complete");
+            Commander.CommanderPrint("Complete");
             
         }
     }
     
     public void setPort(int number){
         this.serverPort = serverPort;
+    }
+    
+    public AccountState getAccount(byte[] address){
+        return context.getAccount(address);
     }
     
     //Overrides
