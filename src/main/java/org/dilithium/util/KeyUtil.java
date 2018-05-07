@@ -182,6 +182,11 @@ public class KeyUtil {
         return Encoding.bytesToCompressedAddress(pubKeyHash);
     }
     
+    public static byte[] publicKeyToAddress(byte[] pubKeyBytes){
+        byte[] pubKeyHash = HashUtil.applyBlake2b(pubKeyBytes);
+        return Encoding.bytesToCompressedAddress(pubKeyHash);
+    }
+    
     public static byte[] applyECDSASig(PrivateKey privateKey, byte[] input) {
 		Signature dsa;
 		byte[] output = new byte[0];

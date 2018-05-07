@@ -20,6 +20,8 @@
 package org.dilithium.core;
 
 import java.io.IOException;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import org.dilithium.Start;
 import org.dilithium.cli.Commander;
@@ -57,12 +59,17 @@ public class Node implements Runnable{
     
     /* Node and mining status variables: */
     private boolean shouldMine;
-    private boolean isRunning;
     private Thread miningThread;
     
     /* This nodes peer to peer variables */
     private Peer2Peer p2p;
     private int serverPort = 8888;
+    
+    /* Checks block and updates the state and adds it to the db context */
+    private BlockProcessor blockProcessor;
+    
+    /* Transactions to be added to block */
+    private Queue<Transaction> transactionPool;
     
     //Contructor 
     public Node(Context context, Block genesisBlock, Miner miner, Axiom axiom){
@@ -72,7 +79,9 @@ public class Node implements Runnable{
         this.minerWallet = Start.localWallet;
         this.axiom = axiom;
         this.tallestHeader = genesisBlock.header;
-        context.putBlock(genesisBlock);
+        this.blockProcessor = new BlockProcessor();
+        blockProcessor.addBlock(genesisBlock, context);
+        transactionPool = new PriorityQueue<Transaction>();
     }
     
     public Node(){
@@ -81,7 +90,7 @@ public class Node implements Runnable{
     
     //getters
     public long getLength(){
-        return this.context.calculateChainSize()+1;
+        return this.context.calculateChainSize();
     }
     
     public int getPort(){
@@ -93,7 +102,7 @@ public class Node implements Runnable{
     }
     
     public boolean isMining(){
-        return this.isRunning && this.shouldMine;
+        return this.shouldMine;
     }
     
     public Context getContext(){
@@ -101,6 +110,10 @@ public class Node implements Runnable{
     }
     
     //Methods
+    public void addTransactionToPool(Transaction tx){
+        transactionPool.add(tx);
+    }
+    
     public void start(){
         if(miningThread == null){
             miningThread = new Thread(this);
@@ -110,7 +123,7 @@ public class Node implements Runnable{
         		p2p = new Peer2Peer(serverPort);
         }
         
-        if(isRunning){
+        if(shouldMine){
             Commander.CommanderPrint("Node Already running");
             return;
         }
@@ -118,7 +131,6 @@ public class Node implements Runnable{
         p2p.start();
         shouldMine = true;
         miningThread.start();
-        isRunning = false;
     }
     
     public void stop() throws IOException{
@@ -130,7 +142,6 @@ public class Node implements Runnable{
         
         //Stop the miner:
         synchronized(this){
-            isRunning = false;
             shouldMine = false;
             this.miner.forceStop();
         }
@@ -141,49 +152,57 @@ public class Node implements Runnable{
     }
         
     private void mine(){
-        isRunning = true;
         while(shouldMine){
             
             //if no current block exists - create a new one
             if(currentBlock == null){
-                Commander.CommanderPrint("- Creating new block");
+                Commander.CommanderPrint("Creating new block");
                 currentBlock = new Block(tallestHeader, axiom);
-                Commander.CommanderPrint("- Encoding new block");
+                //add transactions to block from the transaction pool
+                while(!transactionPool.isEmpty()){
+                    currentBlock.addTransaction(transactionPool.remove());
+                }
+                Commander.CommanderPrint("Encoding new block");
                 currentBlock.getEncoded();
-                Commander.CommanderPrint("- Done");
+                Commander.CommanderPrint("Done");
             }
             
             //Setup Miner
-            Commander.CommanderPrint("# Mining current block...");
+            Commander.CommanderPrint("Mining current block...");
             this.miner = new Miner(currentBlock);
             this.miner.setAxiom(axiom);
             
             //Begin mining the block
             Block minedBlock = this.miner.mineBlock();
             if(minedBlock == null){
-                Commander.CommanderPrint(" Mining interupted !!!");
+                Commander.CommanderPrint("Mining interupted !!!");
                 break;
             }
             
             //block has been mined
-            Commander.CommanderPrint("# Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
-            Commander.CommanderPrint("+ Adding new block to context...");
+            Commander.CommanderPrint("Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
+            Commander.CommanderPrint("Adding new block to context...");
             
             //Add mined block to db:
-            context.putBlock(minedBlock);
+            //context.putBlock(minedBlock);
+            blockProcessor.addBlock(minedBlock, context);
             
             //Update tallest header:
             tallestHeader = minedBlock.header;
             
             //Reset current Block
             currentBlock = null;
-            Commander.CommanderPrint("- Complete");
+            Commander.CommanderPrint("Complete");
             
         }
     }
     
     public void setPort(int number){
         this.serverPort = serverPort;
+    }
+    
+    public AccountState getAccount(byte[] address){
+        return context.getAccount(address);
     }
     
     //Overrides

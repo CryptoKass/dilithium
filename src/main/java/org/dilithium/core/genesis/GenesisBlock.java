@@ -58,8 +58,9 @@ public class GenesisBlock implements GenesisConfig {
                 getHash(),
                 getHash()
         );
+        
         List<byte[]> txs = new ArrayList<byte[]>();
-        Transaction tx = Start.localWallet.generateTransaction(BigInteger.ONE, getHash(), (byte) 0, Start.localContext, AxiomManager.getAxiom("axiomD0"));
+        Transaction tx = Start.localWallet.generateTransaction(BigInteger.TEN, getHash(), (byte) 0, Start.localContext, AxiomManager.getAxiom("axiomD0"));
         txs.add( tx.getEncoded() );
         
         block = new Block(header, AxiomManager.getAxiom("axiomD0"), txs);

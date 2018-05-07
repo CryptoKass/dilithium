@@ -142,6 +142,10 @@ public class Transaction {
         return this.sender;
     }
     
+    public byte[] getSenderAddress(){
+        return KeyUtil.publicKeyToAddress(this.sender);
+    }
+    
     public byte[] getSignature(){
         return this.signature;
     }

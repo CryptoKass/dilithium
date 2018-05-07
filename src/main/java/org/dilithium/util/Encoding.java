@@ -45,8 +45,8 @@ public class Encoding {
      *  though it has no impact on the functionality of the accounts. */
     public static String bytesToAddress(byte[] input, boolean isContract){
         String compressedPublicKey = bytesToHex(bytesToCompressedAddress(input));
-        String prefix = (isContract) ? "Cx" : "0x";
-        return prefix + compressedPublicKey;
+        //String prefix = (isContract) ? "Cx" : "0x";
+        return /*prefix +*/ compressedPublicKey;
     }
     
     public static byte[] bytesToCompressedAddress(byte[] input){

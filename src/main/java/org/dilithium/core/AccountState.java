@@ -110,6 +110,10 @@ public class AccountState {
     public AccountState addBalance(BigInteger value){
         return new AccountState(this.balance.add(value), this.nonce, this.codeHash);
     }
+    /* get clone of account state with modifed balance*/
+    public AccountState removeBalance(BigInteger value){
+        return new AccountState(this.balance.subtract(value), this.nonce, this.codeHash);
+    }
     /* get clone of account state with modifed balance */
     public AccountState addNonce(BigInteger value){
         return new AccountState(this.balance, this.nonce.add(value), this.codeHash);
@@ -118,5 +122,6 @@ public class AccountState {
     public AccountState setNonce(BigInteger value){
         return new AccountState(this.balance, value, this.codeHash);
     }
+    
     
 }

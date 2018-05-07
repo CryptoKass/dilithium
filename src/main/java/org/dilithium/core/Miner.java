@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.bouncycastle.util.encoders.Hex;
+import org.dilithium.cli.Commander;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.db.Context;
@@ -66,7 +67,7 @@ public class Miner {
         
         while(!solved && shouldMine){
             solution = axiom.generateBlockSolution(header);
-            //System.out.println("// nonce: " +  ByteUtil.bytesToInt(header.getNonce()) );
+            //System.out.println("// nonce: " +  ByteUtil.bytesToBigInteger(header.getNonce()) );
             //System.out.println("// Target:" + Hex.toHexString(target));
             //System.out.println("// attempt: " + Hex.toHexString(Arrays.copyOfRange(solution, 0, target.length)));
             solved = Arrays.equals(Arrays.copyOfRange(solution, 0, target.length), target);

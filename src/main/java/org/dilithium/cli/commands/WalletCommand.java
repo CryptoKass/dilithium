@@ -88,6 +88,8 @@ public class WalletCommand implements Command {
             Commander.CommanderPrint(tx.toString());
             Commander.CommanderPrint("Transaction Hash: " + Encoding.bytesToHex(tx.getHash()));
             Commander.CommanderPrint("Is signature valid: " + NodeSettings.getDefault().getAxiom().verifySignature(tx));
+            Start.localNode.addTransactionToPool(tx);
+            
             Commander.CommanderPrint("Broadcast and memepool not yet implemented...");
         }else if(args[0].equals("-help")){
             Commander.CommanderPrint(getHelp());

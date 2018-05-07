@@ -178,11 +178,16 @@ public class ByteUtil {
                 }
             }
         }*/
-        int i = bytesToInt(input);
-        i++;
+        // i = bytesToInt(input);
+        //i++;
         
-       
-        return intToBytes(i);
+        //return intToBytes(i);
+        
+        BigInteger i = bytesToBigInteger(input);
+        i = i.add(BigInteger.ONE);
+        
+        return bigIntegerToBytes(i);
+        
     }
     
     //Populate with

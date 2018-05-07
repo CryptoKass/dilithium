@@ -88,7 +88,7 @@ public class AxiomD0 implements Axiom {
     
     @Override
     public BigInteger getBlockReward(BlockHeader headers){
-        return BigInteger.valueOf(10000000000L);
+        return BigInteger.valueOf(0L);
     }
 
     @Override
@@ -99,14 +99,14 @@ public class AxiomD0 implements Axiom {
         }
         
         //Get Contextual AccountState context
-        AccountState account = context.getAccount(tx.getSender()); 
+        AccountState account = context.getAccount(tx.getSenderAddress()); /*currently sender is pubkey not address */
         
         //check transaction nonce is greater than account nonce:
         if( !(ByteUtil.bytesToBigInteger(tx.getNonce()).compareTo(account.getNonce()) == 1)  ){ //fix this
             return false;
         }
         //check account has enough balance to make the transaction:
-        if( (ByteUtil.bytesToBigInteger(tx.getValue()).compareTo(account.getBalance()) == 1  ) ){
+        if( (ByteUtil.bytesToBigInteger(tx.getValue()).compareTo(account.getBalance()) == 1 ) ){
             return false;
         }
         
