@@ -22,13 +22,15 @@ package org.dilithium.cli.commands;
 import java.math.BigInteger;
 import java.security.interfaces.ECPrivateKey;
 import java.util.Arrays;
+
+import org.bouncycastle.util.encoders.Hex;
 import org.dilithium.Start;
 import org.dilithium.cli.Commander;
 import org.dilithium.config.NodeSettings;
 import org.dilithium.core.Transaction;
 import org.dilithium.core.Wallet;
 import org.dilithium.util.Encoding;
-import org.dilithium.util.KeyUtil;
+import org.dilithium.util.ecdsa.ECKey;
 
 /**
  * This class 
@@ -66,9 +68,9 @@ public class WalletCommand implements Command {
                 return;
             }
             try {
-            ECPrivateKey privateKey = KeyUtil.stringToPrivateKey(privateKeyString);
-            Start.localWallet = new Wallet(privateKey);
-            Commander.CommanderPrint("Wallet Successfully imported!");
+                ECKey keyPair = ECKey.fromPrivate(Hex.decode(privateKeyString));
+                Start.localWallet = new Wallet(keyPair.getPrivKeyBytes());
+                Commander.CommanderPrint("Wallet Successfully imported!");
             } catch (Exception e){
                 Commander.CommanderPrint("ERROR ! couldn't parse private key");
                 return;

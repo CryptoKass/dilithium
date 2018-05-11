@@ -31,7 +31,6 @@ import org.dilithium.config.NodeSettings;
 import org.dilithium.core.axiom.AxiomManager;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.HashUtil;
-import org.dilithium.util.KeyUtil;
 import org.dilithium.util.Log;
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,9 +50,6 @@ public class BlockTest {
         
         /* Setup bouncey castle as security provider */
         Security.addProvider(new BouncyCastleProvider());
-        
-        /* Setup EC References */
-        KeyUtil.SetupEC();
     }
     
     @Test
@@ -64,7 +60,7 @@ public class BlockTest {
 
         List<byte[]> txs = new ArrayList<byte[]>();
         //    public Transaction(byte[] nonce, byte[] value, byte[] data, byte[] recipient, byte networkId, byte[] signature, byte[] sender)
-        txs.add(new Transaction(bytes,bytes,bytes,bytes,bytes[0],bytes,bytes).getEncoded());
+        txs.add(new Transaction(bytes,bytes,bytes,bytes,bytes[0],bytes, bytes, bytes[0], bytes).getEncoded());
 
         Block originalBlock = new Block(header,AxiomManager.getAxiom("axiomD0"), txs);
         byte[] encodedBlock = originalBlock.getEncoded();

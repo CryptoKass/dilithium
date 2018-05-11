@@ -19,6 +19,8 @@
 
 package org.dilithium.util;
 
+import org.bouncycastle.util.encoders.Hex;
+
 import java.util.Arrays;
 
 /**
@@ -26,7 +28,7 @@ import java.util.Arrays;
  */
 public class Encoding {
     
-    /*  Returns bytes as a hexidecimal string,
+    /*  Returns bytes as a hexadecimal string,
      *  this is the standard encoding method */
     public static String bytesToHex(byte[] input){
         StringBuffer hexString = new StringBuffer();
@@ -37,6 +39,12 @@ public class Encoding {
             hexString.append(hexSegment);
         } 
     return hexString.toString();
+    }
+
+    /* For encoding a single byte as a hexadecimal string */
+    public static String byteToHex(byte input) {
+        byte[] temp = {input};
+        return Hex.toHexString(temp);
     }
     
     /*  Hex encodes bytes and returns a string that follows address formatting rules.

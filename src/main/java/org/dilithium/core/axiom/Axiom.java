@@ -24,6 +24,7 @@ import org.dilithium.core.Block;
 import org.dilithium.core.BlockHeader;
 import org.dilithium.core.Transaction;
 import org.dilithium.db.Context;
+import org.dilithium.util.ecdsa.ECKey;
 
 /*
  * The axiom is a set of rules and methods, for generating and validating blocks and transactions.
@@ -53,7 +54,7 @@ public interface Axiom {
     public Transaction updateTransction(Transaction tx);
     public boolean verifyTransaction(Transaction tx, Context context);
     public boolean verifySignature(Transaction tx);
-    public byte[] generateSignature(Transaction tx, PrivateKey privateKey);
+    public ECKey.ECDSASignature generateSignature(Transaction tx, byte[] privateKey);
     public String toString();
     public boolean isBlockSolutionValid(BlockHeader header);
     public boolean isBlockValid(Block block, Context context);

@@ -13,7 +13,6 @@ import org.dilithium.util.Log;
 import java.util.logging.Level;
 import org.dilithium.util.ByteArrayKey;
 import org.dilithium.util.ByteUtil;
-import org.dilithium.util.KeyUtil;
 
 /**
  * This class Reads a block or an encodedBlock and processes it;
@@ -58,7 +57,7 @@ public class BlockProcessor {
             //Gather the values from tx.
             BigInteger value = ByteUtil.bytesToBigInteger(tx.getValue());
             BigInteger nonce = ByteUtil.bytesToBigInteger(tx.getNonce());
-            ByteArrayKey sender = new ByteArrayKey(tx.getSenderAddress());
+            ByteArrayKey sender = new ByteArrayKey(tx.getSender());
             ByteArrayKey reciepient = new ByteArrayKey(tx.getRecipient());
             
             //update recipients account state.
