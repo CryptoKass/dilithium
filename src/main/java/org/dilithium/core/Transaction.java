@@ -52,7 +52,7 @@ public class Transaction {
     /* this transaction signed by the sender, with separate values for r, s and v */ 
     private final byte[] r;
     private final byte[] s;
-    private final byte v;
+    private final byte[] v = new byte[1];
     
     /* the senders(aka the owner of the dilithium being sent) public key. (this can be salvaged from signature) */
     private final byte[] sender; //Note sender should be recovered from signature, and will eventually no longer be part of the tx hash.
@@ -78,7 +78,7 @@ public class Transaction {
         ECKey.ECDSASignature temp = generateSignature(privateKey, axiom);
         this.r = temp.r.toByteArray();
         this.s = temp.s.toByteArray();
-        this.v = temp.v;
+        this.v[0] = temp.v;
 
         this.hash = getHash();
     }
@@ -91,7 +91,7 @@ public class Transaction {
         this.networkId = networkId;
         this.r = r;
         this.s = s;
-        this.v = v;
+        this.v[0] = v;
         this.sender = sender;
         this.hash = getHash();
     }
@@ -109,7 +109,7 @@ public class Transaction {
         this.networkId = parcelData[4].getData()[0];
         this.r = parcelData[5].getData();
         this.s = parcelData[6].getData();
-        this.v = parcelData[7].getData()[0];
+        this.v[0] = parcelData[7].getData()[0];
         this.sender = parcelData[8].getData();
         this.hash = getHash();
         this.encoded = parcel;
@@ -170,7 +170,7 @@ public class Transaction {
     }
     
     public byte getV() {
-        return v;
+        return v[0];
     }
     
     public byte[] getNonce(){
@@ -201,7 +201,7 @@ public class Transaction {
                 "- value: " + ByteUtil.bytesToBigInteger(getValue()) + ", \n" +
                 "- R: " + Hex.toHexString(r) + ", \n" +
                 "- S: " + Hex.toHexString(s) + ", \n" +
-                "- V: " + Encoding.byteToHex(v) + ", \n" +
+                "- V: " + Hex.toHexString(v) + ", \n" +
                 "- }";
         
     }
