@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Dilithium Team .
  *
  * The Dilithium library is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.security.spec.ECPoint;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Primitive;
 
@@ -39,12 +40,12 @@ import org.bouncycastle.asn1.ASN1Primitive;
  * wish to change how this is done, so its useful to only have to change it in one place.
  */
 public class ByteUtil {
-    
+
     public static int getUnsignedByte(byte input) {
         return input & 0xFF;
-  }
-    
-    public static byte[] charArrayToBytes(char[] input){
+    }
+
+    public static byte[] charArrayToBytes(char[] input) {
 
         CharBuffer charBuffer = CharBuffer.wrap(input);
         ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
@@ -55,19 +56,19 @@ public class ByteUtil {
         return bytes;
 
     }
-    
+
     /* short hand method that converts string to bytes, ensures charset is UTF-8 */
-    public static byte[] stringToBytes(String input){
+    public static byte[] stringToBytes(String input) {
         return input.getBytes(Charset.forName("UTF-8"));
     }
-    
+
     /* converts long to bytes, useful for hashing or serialization */
-    public static byte[] longToBytes(long input){
+    public static byte[] longToBytes(long input) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(input);
         return buffer.array();
     }
-    
+
     /* converts a BigInteger to bytes, useful for hashing or serialization */
     public static byte[] bigIntegerToBytes(BigInteger input) {
         byte[] buffer = input.toByteArray();
@@ -78,28 +79,28 @@ public class ByteUtil {
         }*/
         return buffer;
     }
-    
+
     /* int to bytes */
-    public static byte[] intToBytes(int input){
+    public static byte[] intToBytes(int input) {
         return ByteBuffer.allocate(4).putInt(input).array();
     }
-    
+
     /* short to bytes */
-    public static byte[] shortToBytes(short input){
+    public static byte[] shortToBytes(short input) {
         return ByteBuffer.allocate(2).putShort(input).array();
     }
-    
-    public static short getShortFromBytes(byte[] input){
+
+    public static short getShortFromBytes(byte[] input) {
         return ByteBuffer.wrap(input).getShort();
     }
-   
+
     /* converts bytes back into an Integer */
-    public static int bytesToInt(byte[] input){
+    public static int bytesToInt(byte[] input) {
         return ByteBuffer.wrap(input).getInt();
     }
-    
+
     /* converts bytes back into a string, attempts to use UTF-8 first */
-    public static String bytesToString(byte[] input){     
+    public static String bytesToString(byte[] input) {
         try {
             //try to create new bytes uing utf-8
             return new String(input, "UTF-8");
@@ -108,116 +109,97 @@ public class ByteUtil {
             return new String(input);
         }
     }
-    
+
     /* converts bytes back into Big Integer */
-    public static BigInteger bytesToBigInteger(byte[] input){
+    public static BigInteger bytesToBigInteger(byte[] input) {
         return new BigInteger(input);
     }
-    
+
     /* converts bytes back into a string array */
-    public static String[] bytesToStringArray(byte[] input){
+    public static String[] bytesToStringArray(byte[] input) {
         //TODO: populate method:
         return null;
     }
-    
+
     /* concats two byte arrays [] into one in the order "ab". */
     public static byte[] concatenateBytes(byte[] a, byte[] b) {
-        byte[] result = new byte[a.length + b.length]; 
-        System.arraycopy(a, 0, result, 0, a.length); 
-        System.arraycopy(b, 0, result, a.length, b.length); 
+        byte[] result = new byte[a.length + b.length];
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
         return result;
     }
-    
+
     /* Converts ecPoint to a bytearray, java.security.spec.ECPoint not to be confused with bouncey castle ecpoint.*/
-    public static byte[] ecPointToBytes( ECPoint input ){
+    public static byte[] ecPointToBytes(ECPoint input) {
         BigInteger qx = input.getAffineX();
         BigInteger qy = input.getAffineY();
         byte[] qyBytes = bigIntegerToBytes(qy);
         byte[] qxBytes = bigIntegerToBytes(qx);
         byte[] xlengthBytes = new byte[1]; //info bit
-        
-        
+
+
         //fix length issues
         xlengthBytes[0] = (byte) qxBytes.length;
 
-        byte[] buffer = concatenateBytes(xlengthBytes,bigIntegerToBytes(qx));
-        buffer = concatenateBytes(buffer,bigIntegerToBytes(qy));
-        return buffer;        
+        byte[] buffer = concatenateBytes(xlengthBytes, bigIntegerToBytes(qx));
+        buffer = concatenateBytes(buffer, bigIntegerToBytes(qy));
+        return buffer;
     }
-    
+
     /* Converts byte array bck into an ecpoint */
-    public static ECPoint bytesToECPoint(byte[] input ){
+    public static ECPoint bytesToECPoint(byte[] input) {
         int midpoint = (int) input[0];
-        BigInteger qx = bytesToBigInteger(Arrays.copyOfRange(input,1, midpoint+1));
-        BigInteger qy = bytesToBigInteger(Arrays.copyOfRange(input,midpoint+1,input.length));
-        return new ECPoint(qx,qy);
+        BigInteger qx = bytesToBigInteger(Arrays.copyOfRange(input, 1, midpoint + 1));
+        BigInteger qy = bytesToBigInteger(Arrays.copyOfRange(input, midpoint + 1, input.length));
+        return new ECPoint(qx, qy);
     }
-    
+
     //DER
-    public static ASN1Primitive toAsn1Object(byte[] data) throws IOException
-    {
+    public static ASN1Primitive toAsn1Object(byte[] data) throws IOException {
         ByteArrayInputStream inStream = new ByteArrayInputStream(data);
         ASN1InputStream asnInputStream = new ASN1InputStream(inStream);
 
         return asnInputStream.readObject();
     }
-    
+
     //Increment 
     public static byte[] increment(byte[] input) {
-       /* boolean carryOver = true;
-        int len = (input.length - 1);
-        for (int i = len; i >= 0; i--) {
-            if (carryOver) {
-                if (input[i] == 0) {
-                    input[i] = 1;
-                    carryOver = false;
-                }
-                else {
-                    input[i] = 0;
-                    carryOver = true;
-                }
+        for (int i = input.length - 1; i >= 0; --i) {
+            if (++input[i] != 0) {
+                return input;
             }
-        }*/
-        // i = bytesToInt(input);
-        //i++;
-        
-        //return intToBytes(i);
-        
-        BigInteger i = bytesToBigInteger(input);
-        i = i.add(BigInteger.ONE);
-        
-        return bigIntegerToBytes(i);
-        
+        }
+        throw new IllegalStateException("Counter overflow");
     }
-    
+
     //Populate with
-    public static byte[] populate(byte[] array,byte input){
-        for(int i=0;i < array.length; i++){
+    public static byte[] populate(byte[] array, byte input) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = input;
         }
         return array;
     }
-    
+
     //get byte time
-    public static byte[] getNowTimeStamp(){
+    public static byte[] getNowTimeStamp() {
         int dateInSec = (int) (System.currentTimeMillis() / 1000);
         return ByteBuffer.allocate(4).putInt(dateInSec).array();
-        
+
     }
-    
-    public static List<byte[]> parcelDataToListBytes( byte[] parcelData ){
-        int cursor  = 0;
+
+    public static List<byte[]> parcelDataToListBytes(byte[] parcelData) {
+        int cursor = 0;
         int length = 0;
         List<byte[]> listBytes = new ArrayList<byte[]>();
-        while(cursor < parcelData.length-1){
-            length = (int) ByteUtil.getShortFromBytes(Arrays.copyOfRange(parcelData,cursor,cursor+2));
-            cursor+=2; //move cursor along to start of data bytes
-            listBytes.add(Arrays.copyOfRange(parcelData,cursor,cursor+length));
+        while (cursor < parcelData.length - 1) {
+            length = (int) ByteUtil.getShortFromBytes(Arrays.copyOfRange(parcelData, cursor, cursor + 2));
+            cursor += 2; //move cursor along to start of data bytes
+            listBytes.add(Arrays.copyOfRange(parcelData, cursor, cursor + length));
             cursor += length; //move cursor to end of content           
         }
         return listBytes;
     }
-    
-   
+
+
 } 
 
