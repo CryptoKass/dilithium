@@ -24,7 +24,7 @@ import java.util.List;
 import org.dilithium.Start;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.axiom.AxiomManager;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.serialization.ParcelData;
 import org.dilithium.serialization.Serializer;
 import org.dilithium.util.ByteUtil;
@@ -42,7 +42,7 @@ public class Block {
     private boolean parsed = false;
     private byte[] axiomID;
     private Axiom axiom;
-    private Context context;
+    private StorageContext context;
     
     public Block(BlockHeader header, Axiom axiom, List<byte[]> transactions){
         this.header = header;

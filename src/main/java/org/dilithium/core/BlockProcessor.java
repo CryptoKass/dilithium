@@ -8,7 +8,7 @@ package org.dilithium.core;
 
 import java.math.BigInteger;
 import org.dilithium.core.axiom.Axiom;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.util.Log;
 import java.util.logging.Level;
 import org.dilithium.util.ByteArrayKey;
@@ -21,11 +21,11 @@ import org.dilithium.util.KeyUtil;
  */
 public class BlockProcessor {
     
-    public boolean addBlock(byte[] blockParcel, Context context){
+    public boolean addBlock(byte[] blockParcel, StorageContext context){
         return addBlock(new Block(blockParcel), context);
     }
     
-    public boolean addBlock(Block block, Context context){
+    public boolean addBlock(Block block, StorageContext context){
         BlockHeader header = block.header;
         
         //get the axiom from the block;

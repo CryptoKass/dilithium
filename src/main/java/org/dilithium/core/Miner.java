@@ -23,10 +23,9 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.bouncycastle.util.encoders.Hex;
-import org.dilithium.cli.Commander;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.axiom.AxiomManager;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.Log;
 
@@ -35,7 +34,7 @@ import org.dilithium.util.Log;
  */
 public class Miner {
     
-    public Context context;
+    public StorageContext storageContext;
     
     private Block block;
     

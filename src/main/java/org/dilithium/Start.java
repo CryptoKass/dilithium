@@ -27,7 +27,7 @@ import org.dilithium.cli.Commander;
 import org.dilithium.config.NodeSettings;
 import org.dilithium.core.Node;
 import org.dilithium.core.Wallet;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.util.KeyUtil;
 import org.dilithium.util.Log;
 
@@ -38,7 +38,7 @@ public class Start {
     
     public static NodeSettings config;
     public static Wallet localWallet;
-    public static Context localContext;
+    public static StorageContext localContext;
     public static Node localNode;
     
     /* This method is run when the program first starts */
@@ -56,7 +56,7 @@ public class Start {
         
         /* Get local database and storage context 
          * will contain the local state of blocks and accounts*/
-        localContext = new Context();
+        localContext = new StorageContext();
         Log.log(Level.INFO, "\nLocalContext: " + localContext.toString());
         
         /* Setup temp local wallet */

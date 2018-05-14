@@ -28,7 +28,7 @@ import org.dilithium.cli.Commander;
 import org.dilithium.config.NodeSettings;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.core.genesis.GenesisBlock;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.networking.Peer2Peer;
 import org.dilithium.util.Encoding;
 
@@ -36,10 +36,10 @@ import org.dilithium.util.Encoding;
  * This Class handles the block-chain as a full-node.
  */
 public class Node implements Runnable{
-    /* The storage and db context used by this node */
-    private Context context;
+    /* The storage and db storageContext used by this node */
+    private StorageContext storageContext;
     
-    /* The first block in the blockchain, via context */
+    /* The first block in the blockchain, via storageContext */
     private Block genesisBlock;
     
     /* The wallet that will recieve rewards for each block mined (If the current axiom supports that */ 
@@ -51,7 +51,7 @@ public class Node implements Runnable{
     /* The current axiom in use by the latest block in the blockchain */
     private Axiom axiom;
     
-    /* The header from the latest block in the blockchain, via context. */
+    /* The header from the latest block in the blockchain, via storageContext. */
     private BlockHeader tallestHeader;
     
     /* The block that is being mined */
@@ -65,32 +65,32 @@ public class Node implements Runnable{
     private Peer2Peer p2p;
     private int serverPort = 8888;
     
-    /* Checks block and updates the state and adds it to the db context */
+    /* Checks block and updates the state and adds it to the db storageContext */
     private BlockProcessor blockProcessor;
     
     /* Transactions to be added to block */
     private Queue<Transaction> transactionPool;
     
     //Contructor 
-    public Node(Context context, Block genesisBlock, Miner miner, Axiom axiom){
-        this.context = context;
+    public Node(StorageContext storageContext, Block genesisBlock, Miner miner, Axiom axiom){
+        this.storageContext = storageContext;
         this.genesisBlock = genesisBlock;
         this.miner = miner;
         this.minerWallet = Start.localWallet;
         this.axiom = axiom;
         this.tallestHeader = genesisBlock.header;
         this.blockProcessor = new BlockProcessor();
-        blockProcessor.addBlock(genesisBlock, context);
+        blockProcessor.addBlock(genesisBlock, storageContext);
         transactionPool = new PriorityQueue<Transaction>();
     }
     
     public Node(){
-        this(Start.localContext,GenesisBlock.getInstance().getBlock(), null, NodeSettings.getDefault().getAxiom() );
+        this(Start.localContext, GenesisBlock.getInstance().getBlock(), null, NodeSettings.getDefault().getAxiom() );
     }
     
     //getters
     public long getLength(){
-        return this.context.calculateChainSize();
+        return this.storageContext.calculateChainSize();
     }
     
     public int getPort(){
@@ -105,8 +105,8 @@ public class Node implements Runnable{
         return this.shouldMine;
     }
     
-    public Context getContext(){
-        return this.context;
+    public StorageContext getStorageContext(){
+        return this.storageContext;
     }
     
     //Methods
@@ -180,12 +180,12 @@ public class Node implements Runnable{
             }
             
             //block has been mined
-            Commander.CommanderPrint("Newly mined block is valid:" + axiom.isBlockValid(minedBlock, context));
-            Commander.CommanderPrint("Adding new block to context...");
+            Commander.CommanderPrint("Newly mined block is valid:" + axiom.isBlockValid(minedBlock, storageContext));
+            Commander.CommanderPrint("Adding new block to storageContext...");
             
             //Add mined block to db:
-            //context.putBlock(minedBlock);
-            blockProcessor.addBlock(minedBlock, context);
+            //storageContext.putBlock(minedBlock);
+            blockProcessor.addBlock(minedBlock, storageContext);
             
             //Update tallest header:
             tallestHeader = minedBlock.header;
@@ -202,7 +202,7 @@ public class Node implements Runnable{
     }
     
     public AccountState getAccount(byte[] address){
-        return context.getAccount(address);
+        return storageContext.getAccount(address);
     }
     
     //Overrides

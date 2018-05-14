@@ -24,7 +24,7 @@ import java.util.Arrays;
 import org.dilithium.Start;
 import org.dilithium.cli.Commander;
 import org.dilithium.core.Block;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.serialization.Json;
 
 /**
@@ -76,9 +76,9 @@ public class NodeCommand implements Command {
             
             Commander.CommanderPrint("Fetching block...");
             Commander.CommanderPrint("Searching for block with index: " + indexString);          
-            Context context = Start.localNode.getContext();
+            StorageContext storageContext = Start.localNode.getStorageContext();
             long index = Long.parseLong(indexString);
-            Block block = context.getBlock(index);
+            Block block = storageContext.getBlock(index);
             
             if(block == null) {
                 Commander.CommanderPrint("ERROR ! block not found.");

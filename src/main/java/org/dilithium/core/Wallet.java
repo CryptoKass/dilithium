@@ -25,7 +25,7 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 
 import org.dilithium.core.axiom.Axiom;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.Encoding;
 import org.dilithium.util.JsonUtil;
@@ -56,7 +56,7 @@ public class Wallet {
                 "}";
     }
 
-    public String toString(Context context) {
+    public String toString(StorageContext context) {
         return "wallet: { \n" +
                 "public-key: " + KeyUtil.publicKeyToString(publicKey) + ", \n" +
                 "address: " + Encoding.bytesToAddress(address) + ", \n" +
@@ -79,7 +79,7 @@ public class Wallet {
     }
 
     /* returns balance as it is recorded in the given context */
-    public BigInteger getBalance(Context context) {
+    public BigInteger getBalance(StorageContext context) {
         AccountState account = context.getAccount(address);
         if (account != null) {
             return account.getBalance();
@@ -89,7 +89,7 @@ public class Wallet {
     }
 
     /*generates a transaction, without doing any validity checks */
-    public Transaction generateTransaction(BigInteger value, byte[] recipient, byte networkId, Context context, Axiom axiom) {
+    public Transaction generateTransaction(BigInteger value, byte[] recipient, byte networkId, StorageContext context, Axiom axiom) {
 
         byte[] nonce = ByteUtil.bigIntegerToBytes(BigInteger.ZERO);
         byte[] data = ByteUtil.intToBytes(0);

@@ -33,7 +33,7 @@ import org.dilithium.core.Block;
 import org.dilithium.core.BlockHeader;
 import org.dilithium.core.Transaction;
 import org.dilithium.core.genesis.GenesisBlock;
-import org.dilithium.db.Context;
+import org.dilithium.db.StorageContext;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.HashUtil;
 import org.dilithium.util.KeyUtil;
@@ -92,7 +92,7 @@ public class AxiomD0 implements Axiom {
     }
 
     @Override
-    public boolean verifyTransaction(Transaction tx, Context context) {
+    public boolean verifyTransaction(Transaction tx, StorageContext context) {
         //check if transaction signature is valid;
         if(!tx.isVerified()){
             if(!tx.verifySignature(this)) return false;
@@ -165,7 +165,7 @@ public class AxiomD0 implements Axiom {
     }
     
     @Override
-    public boolean isBlockValid(Block block, Context context){
+    public boolean isBlockValid(Block block, StorageContext context){
         
         boolean isGenesis;
         

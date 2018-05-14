@@ -33,9 +33,9 @@ import org.dilithium.util.JsonUtil;
 /**
  * This class
  */
-public class Context {
+public class StorageContext {
     // Parent to route to :
-    public Context parent;
+    public StorageContext parent;
     public boolean defaultToMain;
 
     public HashMap<ByteArrayKey, AccountState> accounts;
@@ -139,11 +139,11 @@ public class Context {
     }
 
     //Constructors
-    public Context() {
+    public StorageContext() {
         this(null, false);
     }
 
-    public Context(Context parent, boolean defaultToMain) {
+    public StorageContext(StorageContext parent, boolean defaultToMain) {
         this.parent = parent;
         this.defaultToMain = defaultToMain;
         this.accounts = new HashMap<ByteArrayKey, AccountState>();
