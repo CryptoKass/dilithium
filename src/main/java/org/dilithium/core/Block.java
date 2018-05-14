@@ -29,6 +29,7 @@ import org.dilithium.serialization.ParcelData;
 import org.dilithium.serialization.Serializer;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.HashUtil;
+import org.dilithium.util.JsonUtil;
 
 /**
  * This class 
@@ -139,7 +140,11 @@ public class Block {
         });
         return encodedBlock;
     }
-    
+
+    public String getJson(){
+        return JsonUtil.getJson(this);
+    }
+
     @Override 
     public String toString(){
         return header.toString();

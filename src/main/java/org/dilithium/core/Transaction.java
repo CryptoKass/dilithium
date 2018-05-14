@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Dilithium Team .
  *
  * The Dilithium library is free software; you can redistribute it and/or
@@ -21,21 +21,19 @@ package org.dilithium.core;
 
 import java.math.BigInteger;
 import java.security.interfaces.ECPrivateKey;
+
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.serialization.ParcelData;
 import org.dilithium.serialization.Serializer;
-import org.dilithium.util.ByteUtil;
-import org.dilithium.util.Encoding;
-import org.dilithium.util.HashUtil;
-import org.dilithium.util.KeyUtil;
+import org.dilithium.util.*;
 
 /**
- * This class 
+ * This class
  */
 public class Transaction {
-    
+
     //Transaction contents:
-    
+
     /* The hash of the parcel encoded transactiions contents: nonce, value, data, receipient, sender and networkId */
     private byte[] hash;
     /* this nonce prevents replay attacks */
@@ -48,7 +46,7 @@ public class Transaction {
     private final byte[] recipient;
     /* network id prevents replay attack by specifying the transactions network e.g. main-net, test-net or a forked network */
     private final byte networkId;
-    /* this transactoins hash signed by the sender, concatonnated in the order r-s-v  */ 
+    /* this transactoins hash signed by the sender, concatonnated in the order r-s-v  */
     private final byte[] signature;
     /* the senders(aka the owner of the dilithium being sent) public key. (this can be salvaged from signature) */
     private final byte[] sender; //Note sender should be recovered from signature, and will eventually no longer be part of the tx hash.
@@ -56,14 +54,14 @@ public class Transaction {
     private byte[] encoded;
     /* this verified bool is true if transaction is actually from the owner of the balance -> signature is valid */
     private boolean verified;
-  
-    
+
+
     // Constructors :
-    public Transaction(ECPrivateKey privateKey, BigInteger nonce, BigInteger value, byte[] data, byte[] recipient, byte networkId, byte[] sender, Axiom axiom){
-        this(privateKey, ByteUtil.bigIntegerToBytes(nonce),ByteUtil.bigIntegerToBytes(value), data, recipient, networkId, sender, axiom);
+    public Transaction(ECPrivateKey privateKey, BigInteger nonce, BigInteger value, byte[] data, byte[] recipient, byte networkId, byte[] sender, Axiom axiom) {
+        this(privateKey, ByteUtil.bigIntegerToBytes(nonce), ByteUtil.bigIntegerToBytes(value), data, recipient, networkId, sender, axiom);
     }
-    
-    public Transaction(ECPrivateKey privateKey, byte[] nonce, byte[] value, byte[] data, byte[] recipient, byte networkId, byte[] sender, Axiom axiom){
+
+    public Transaction(ECPrivateKey privateKey, byte[] nonce, byte[] value, byte[] data, byte[] recipient, byte networkId, byte[] sender, Axiom axiom) {
         this.nonce = nonce;
         this.value = value;
         this.data = data;
@@ -73,8 +71,8 @@ public class Transaction {
         this.hash = getHash();
         this.signature = generateSignature(privateKey, axiom);
     }
-    
-    public Transaction(byte[] nonce, byte[] value, byte[] data, byte[] recipient, byte networkId, byte[] signature, byte[] sender){
+
+    public Transaction(byte[] nonce, byte[] value, byte[] data, byte[] recipient, byte networkId, byte[] signature, byte[] sender) {
         this.nonce = nonce;
         this.value = value;
         this.data = data;
@@ -84,12 +82,12 @@ public class Transaction {
         this.sender = sender;
         this.hash = getHash();
     }
-    
-    public Transaction(byte[] parcel){
+
+    public Transaction(byte[] parcel) {
         this(Serializer.getParcelData(parcel), parcel);
     }
-    
-    public Transaction(ParcelData[] parcelData, byte[] parcel){
+
+    public Transaction(ParcelData[] parcelData, byte[] parcel) {
         //this.nonce, this.value, this.data, this.recipient, this.networkId, this.sender
         this.nonce = parcelData[0].getData();
         this.value = parcelData[1].getData();
@@ -101,84 +99,88 @@ public class Transaction {
         this.hash = getHash();
         this.encoded = parcel;
     }
-    
+
     // Methods :
-    public byte[] getEncoded(){
-        if(encoded == null){
+    public byte[] getEncoded() {
+        if (encoded == null) {
             encoded = Serializer.createParcel(new Object[]{this.nonce, this.value, this.data, this.recipient, this.networkId, this.signature, this.sender});
         }
         return encoded;
     }
-    
+
     /* Verify the transactions Signature using an axiom: */
-    public boolean verifySignature(Axiom axiom){
+    public boolean verifySignature(Axiom axiom) {
         //use axiom to verify signature.
         verified = axiom.verifySignature(this);
         return verified;
     }
-    
+
     /* quickly check if the transaction is verified */
-    public boolean isVerified(){
+    public boolean isVerified() {
         return verified;
     }
-    
+
     /* getter for the transaction hash, if none exists then one will be generated */
-    public byte[] getHash(){
+    public byte[] getHash() {
         //Todo This should use an axiom.
-        if(this.hash == null){
+        if (this.hash == null) {
             this.hash = HashUtil.applySha256(
-                Serializer.createParcel(new Object[]{  this.nonce, this.value, this.data, this.recipient, this.networkId, this.sender })  
+                    Serializer.createParcel(new Object[]{this.nonce, this.value, this.data, this.recipient, this.networkId, this.sender})
             );
         }
         return hash;
     }
-    
+
     /* generate signature using an axiom */
-    public byte[] generateSignature(ECPrivateKey privateKey, Axiom axiom){
+    public byte[] generateSignature(ECPrivateKey privateKey, Axiom axiom) {
         return axiom.generateSignature(this, privateKey);
     }
-    
-    public byte[] getSender(){
+
+    public byte[] getSender() {
         return this.sender;
     }
-    
-    public byte[] getSenderAddress(){
+
+    public byte[] getSenderAddress() {
         return KeyUtil.publicKeyToAddress(this.sender);
     }
-    
-    public byte[] getSignature(){
+
+    public byte[] getSignature() {
         return this.signature;
     }
-    
-    public byte[] getNonce(){
+
+    public byte[] getNonce() {
         return this.nonce;
     }
-    
-    public byte[] getData(){
+
+    public byte[] getData() {
         return this.getData();
     }
-    
-    public byte[] getRecipient(){
+
+    public byte[] getRecipient() {
         return this.recipient;
     }
-    
-    public byte networkId(){
+
+    public byte networkId() {
         return this.networkId;
     }
-    
-    public byte[] getValue(){
+
+    public byte[] getValue() {
         return this.value;
     }
-    
+
+    public String getJson() {
+        return JsonUtil.getJson(this);
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "transaction: {\n" +
                 "- sender: " + KeyUtil.publicKeyToAddressString(getSender()) + ", \n" +
                 "- recipient: " + Encoding.bytesToAddress(getRecipient()) + ", \n" +
                 "- value: " + ByteUtil.bytesToBigInteger(getValue()) + ", \n" +
                 "- signature: " + Encoding.bytesToHex(getSignature()) + ", \n" +
                 "- }";
-        
+
     }
-    
+
 }

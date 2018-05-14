@@ -27,6 +27,7 @@ import org.dilithium.serialization.ParcelData;
 import org.dilithium.serialization.Serializer;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.Encoding;
+import org.dilithium.util.JsonUtil;
 
 /**
  * This class 
@@ -246,7 +247,9 @@ public class BlockHeader { // ~141 bytes
         //System.out.println("header parcel length: " + parcel.length);
         return parcel;
     }
-    
+    public String getJson(){
+        return JsonUtil.getJson(this);
+    }
     @Override
     public String toString(){
         return "block-header: {\n" +
