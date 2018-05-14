@@ -69,14 +69,29 @@ public class ByteUtil {
     }
     
     /* converts a BigInteger to bytes, useful for hashing or serialization */
-    public static byte[] bigIntegerToBytes(BigInteger input) {
-        byte[] buffer = input.toByteArray();
-        /*if (buffer[0] == 0) {
-            byte[] bufferFixed = new byte[buffer.length - 1];
-            System.arraycopy(buffer, 1, bufferFixed, 0, bufferFixed.length);
-            buffer = bufferFixed;
-        }*/
-        return buffer;
+    public static byte[] bigIntegerToBytes(BigInteger value) {
+        if (value == null)
+            return null;
+
+        byte[] data = value.toByteArray();
+
+        if (data.length != 1 && data[0] == 0) {
+            byte[] tmp = new byte[data.length - 1];
+            System.arraycopy(data, 1, tmp, 0, tmp.length);
+            data = tmp;
+        }
+        return data;
+    }
+
+    public static byte[] bigIntegerToBytes(BigInteger b, int numBytes) {
+        if (b == null)
+            return null;
+        byte[] bytes = new byte[numBytes];
+        byte[] biBytes = b.toByteArray();
+        int start = (biBytes.length == numBytes + 1) ? 1 : 0;
+        int length = Math.min(biBytes.length, numBytes);
+        System.arraycopy(biBytes, start, bytes, numBytes - length, length);
+        return bytes;
     }
     
     /* int to bytes */
@@ -217,6 +232,28 @@ public class ByteUtil {
         }
         return listBytes;
     }
+
+    public static byte[] merge(byte[]... arrays)
+    {
+        int arrCount = 0;
+        int count = 0;
+        for (byte[] array: arrays)
+        {
+            arrCount++;
+            count += array.length;
+        }
+
+        // Create new array and copy all array contents
+        byte[] mergedArray = new byte[count];
+        int start = 0;
+        for (byte[] array: arrays) {
+            System.arraycopy(array, 0, mergedArray, start, array.length);
+            start += array.length;
+        }
+        return mergedArray;
+    }
+
+
     
    
 } 

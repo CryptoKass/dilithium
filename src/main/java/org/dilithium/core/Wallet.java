@@ -20,65 +20,56 @@
 package org.dilithium.core;
 
 import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
+
+import org.bouncycastle.util.encoders.Hex;
 import org.dilithium.core.axiom.Axiom;
 import org.dilithium.db.Context;
 import org.dilithium.util.ByteUtil;
-import org.dilithium.util.Encoding;
-import org.dilithium.util.KeyUtil;
+import org.dilithium.util.ecdsa.ECKey;
 
 /**
  * This class 
  */
 public class Wallet {
-    private ECPrivateKey privateKey;
-    private ECPublicKey publicKey;
-    private byte[] address;
+    private ECKey keyPair;
     private Axiom axiom;
     
-    public ECPublicKey getPublicKey(){
-        return this.publicKey;
+    public byte[] getPublicKey(){
+        return this.keyPair.getPubKey();
     }
     
     public byte[] getAddress(){
-        return this.address;
+        return this.keyPair.getAddress();
     }
     
     @Override
     public String toString(){
         return "wallet: { \n" +
-                "public-key: " + KeyUtil.publicKeyToString(publicKey) + ", \n" +
-                "address: " + Encoding.bytesToAddress(address) +" \n" +
+                "public-key: " + Hex.toHexString(this.keyPair.getPubKey()) + ", \n" +
+                "address: " + Hex.toHexString(this.keyPair.getAddress()) +" \n" +
                 "}";
     }
     
     public String toString(Context context){
         return "wallet: { \n" +
-                "public-key: " + KeyUtil.publicKeyToString(publicKey) + ", \n" +
-                "address: " + Encoding.bytesToAddress(address) +", \n" +
+                "public-key: " + Hex.toHexString(this.keyPair.getPubKey()) + ", \n" +
+                "address: " + Hex.toHexString(this.keyPair.getAddress()) +" \n" +
                 "balance: " + getBalance(context) + " \n" +
                 "}";
     }
     
     
     public Wallet(){
-        KeyPair keys = KeyUtil.GenerateKeyPair();
-        this.privateKey = (ECPrivateKey) keys.getPrivate();
-        this.publicKey = (ECPublicKey) keys.getPublic();
-        this.address = KeyUtil.publicKeyToAddress(publicKey);
+        this.keyPair = new ECKey();
     }
     
-    public Wallet(ECPrivateKey privateKey){
-        this.privateKey = privateKey;
-        this.publicKey = KeyUtil.privateKeyToPublicKey(privateKey);
-        this.address = KeyUtil.publicKeyToAddress(publicKey);
+    public Wallet(byte[] privKey){
+        this.keyPair = ECKey.fromPrivate(privKey);
     }
     
     /* returns balance as it is recorded in the given context */
     public BigInteger getBalance(Context context){
-        AccountState account = context.getAccount(address);
+        AccountState account = context.getAccount(keyPair.getAddress());
         if(account != null) {
             return account.getBalance();
         }else{
@@ -91,16 +82,16 @@ public class Wallet {
         
         byte[] nonce = ByteUtil.bigIntegerToBytes(BigInteger.ZERO);
         byte[] data = ByteUtil.intToBytes(0);
-        byte[] sender = KeyUtil.encodeECPublicKey(publicKey);
+        byte[] sender = keyPair.getAddress();
         
         //attempt to get account nonce;
-        AccountState account = context.getAccount(address);
+        AccountState account = context.getAccount(keyPair.getAddress());
         if(account != null){
             nonce = ByteUtil.bigIntegerToBytes(account.getNonce());
             nonce = ByteUtil.increment(nonce);
         }
        
-        Transaction tx = new Transaction(privateKey, nonce, ByteUtil.bigIntegerToBytes(value), data, recipient, networkId, sender, axiom);
+        Transaction tx = new Transaction(keyPair.getPrivKeyBytes(), nonce, ByteUtil.bigIntegerToBytes(value), data, recipient, networkId, sender, axiom);
         //Transaction(ECPrivateKey privateKey, byte[] nonce, byte[] value, byte[] data, byte[] recipient, byte networkId, byte[] sender, Axiom axiom)
         
         return tx;

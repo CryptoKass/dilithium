@@ -16,7 +16,6 @@ import static org.dilithium.test.Testing.totalTestsRun;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.Encoding;
 import org.dilithium.util.HashUtil;
-import org.dilithium.util.KeyUtil;
 
 /* 
  * Copyright (C) 2018 Dilithium Team .

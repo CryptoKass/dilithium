@@ -19,14 +19,11 @@
 
 package org.dilithium.cli.commands;
 
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
 import java.util.Arrays;
+
+import org.bouncycastle.util.encoders.Hex;
 import org.dilithium.cli.Commander;
-import org.dilithium.util.KeyUtil;
+import org.dilithium.util.ecdsa.ECKey;
 
 /**
  * This class 
@@ -56,37 +53,32 @@ public class KeyUtilCommand implements Command {
         }
         
         if(args[0].equals("generate")){
-            PrivateKey privateKey = null;
-            PublicKey publicKey = null;
-            KeyPair keys = null;
+            ECKey keyPair = null;
+
             
             if(args.length > 1) {
-                privateKey = KeyUtil.stringToPrivateKey(args[1]);
-                publicKey = KeyUtil.privateKeyToPublicKey((ECPrivateKey)privateKey);
+                keyPair = ECKey.fromPrivate(Hex.decode(args[1]));
             }else{
-                keys = KeyUtil.GenerateKeyPair();
-                privateKey = keys.getPrivate();
-                publicKey = keys.getPublic();
+                keyPair = new ECKey();
             }
             
             Commander.CommanderPrint("--- [DILITHIUM KEY PAIR] ---");
             //converting key pairs to string:
-            String priv = KeyUtil.privateKeyToString((ECPrivateKey) privateKey);
-            String pub = KeyUtil.publicKeyToString((ECPublicKey) publicKey);
+            String priv = Hex.toHexString(keyPair.getPrivKeyBytes());
+            String pub = Hex.toHexString(keyPair.getPubKey());
             //converting string back to keys:
-            ECPrivateKey privkey = KeyUtil.stringToPrivateKey(priv);
-            ECPublicKey pubkey = KeyUtil.stringToPublicKey(pub);
+            keyPair = ECKey.fromPrivate(Hex.decode(priv));
             //converting key to address:
-            String address = KeyUtil.publicKeyToAddressString(pubkey);
+            String address = Hex.toHexString(keyPair.getAddress());
             
-            Commander.CommanderPrint( "Raw-Private-Key: " + KeyUtil.privateKeyToString(privkey));
-            Commander.CommanderPrint( "Raw-Public-Key:  " + KeyUtil.publicKeyToString(pubkey));
-            Commander.CommanderPrint( "Address:         " + KeyUtil.publicKeyToAddressString(pubkey));
+            Commander.CommanderPrint( "Raw-Private-Key: " + priv);
+            Commander.CommanderPrint( "Raw-Public-Key:  " + pub);
+            Commander.CommanderPrint( "Address:         " + address);
             
         }else if(args[0].equals("-help")){
             Commander.CommanderPrint(getHelp());
         }else {
-            Commander.CommanderPrint("Sorry param not yet implemented");
+            Commander.CommanderPrint("Sorry, param not yet implemented");
         }
     }
     

@@ -36,8 +36,10 @@ import org.dilithium.core.genesis.GenesisBlock;
 import org.dilithium.db.Context;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.HashUtil;
-import org.dilithium.util.KeyUtil;
 import org.dilithium.util.Log;
+import org.dilithium.util.ecdsa.ECKey;
+
+import static org.dilithium.util.HashUtil.applyKeccak;
 
 /**
  * AxiomD0 - Dilithium 0
@@ -99,7 +101,7 @@ public class AxiomD0 implements Axiom {
         }
         
         //Get Contextual AccountState context
-        AccountState account = context.getAccount(tx.getSenderAddress()); /*currently sender is pubkey not address */
+        AccountState account = context.getAccount(tx.getSender());
         
         //check transaction nonce is greater than account nonce:
         if( !(ByteUtil.bytesToBigInteger(tx.getNonce()).compareTo(account.getNonce()) == 1)  ){ //fix this
@@ -123,11 +125,9 @@ public class AxiomD0 implements Axiom {
     public boolean verifySignature(Transaction tx) {
         boolean verified = false;
         try {
-            PublicKey publicKey = KeyUtil.decodeECPublicKey(tx.getSender());
-            Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
-            ecdsaVerify.initVerify(publicKey);
-            ecdsaVerify.update(tx.getHash());
-            verified = ecdsaVerify.verify(tx.getSignature());
+            ECKey.ECDSASignature sig = ECKey.ECDSASignature.fromComponents(tx.getR(), tx.getS(), tx.getV());
+            ECKey temp = ECKey.fromPublicOnly(ECKey.signatureToKeyBytes(applyKeccak(tx.getParcelledSansSig()), sig));
+            if(ECKey.verifyWithRecovery(applyKeccak(tx.getParcelledSansSig()), sig) && Arrays.equals(tx.getSender(),temp.getAddress())) verified = true;
         } catch (Exception e) {
             verified = false;
         }
@@ -135,8 +135,8 @@ public class AxiomD0 implements Axiom {
     }
 
     @Override
-    public byte[] generateSignature(Transaction tx, PrivateKey privateKey) {
-        return KeyUtil.applyECDSASig(privateKey,tx.getHash());
+    public ECKey.ECDSASignature generateSignature(Transaction tx, byte[] privateKey) {
+        return (ECKey.fromPrivate(privateKey)).sign(applyKeccak(tx.getParcelledSansSig()));
     }
     
     @Override

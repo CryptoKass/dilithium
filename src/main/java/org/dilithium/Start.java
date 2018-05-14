@@ -28,7 +28,6 @@ import org.dilithium.config.NodeSettings;
 import org.dilithium.core.Node;
 import org.dilithium.core.Wallet;
 import org.dilithium.db.Context;
-import org.dilithium.util.KeyUtil;
 import org.dilithium.util.Log;
 
 /**
@@ -50,9 +49,6 @@ public class Start {
         
         /* Setup bouncey castle as security provider */
         Security.addProvider(new BouncyCastleProvider());
-        
-        /* Setup EC References */
-        KeyUtil.SetupEC();
         
         /* Get local database and storage context 
          * will contain the local state of blocks and accounts*/

@@ -38,7 +38,6 @@ import org.dilithium.serialization.Serializer;
 import org.dilithium.util.ByteUtil;
 import org.dilithium.util.Encoding;
 import org.dilithium.util.HashUtil;
-import org.dilithium.util.KeyUtil;
 
 
 
