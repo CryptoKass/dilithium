@@ -1,6 +1,5 @@
 package org.dilithium.networking;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,52 +7,53 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
-import org.dilithium.util.Log;
-
+import org.dilithium.util.ByteArrayKey;
 
 public class Peer2Peer {
 
 	private int port;
     private ArrayList<Peer>  peers;
-    private DataOutputStream outputStream;
-    public 	Thread           serverThread;
+    private DataOutputStream out;
+    private Thread           serverThread;
     private boolean          runningServer;
-    private HashMap<String, NetworkCommand> commands = new HashMap<>();
+    private HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
     private ServerSocket server;
-    private Socket socket = null;
-
-    //Node with access to blockchain
-    public Peer2Peer(int port){
-        this.port = port;
-        peers = new ArrayList<>();
-        serverThread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    listen();
-                    Log.log(Level.INFO, "Connection Ended");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });		
-        initializeCommands();
-    }
+    private Socket socket;
     
+    //Node with out storing Blockchain
+    public Peer2Peer(int port){
+	System.out.println("Making node");
+    this.port = port;
+    peers = new ArrayList<>();
+    serverThread = new Thread(new Runnable() {
+        public void run() {
+            try {
+                listen();
+                System.out.println("Connection Ended");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    });		
+    initializeCommands();
+}
     
     private void initializeCommands() {
-        this.commands.put("ping", new PingCommandHandler()); 
+    		/**List of Commands
+    		 * 0xFF - Ping
+    		 * 0xFE - Block_Height
+    		 */
+        this.commands.put(new ByteArrayKey((byte)0xFF), new PingCommandHandler()); 
     }
 
     public void start(){
         if(serverThread.isAlive()){
-            Log.log(Level.INFO, "Server is already running.");
+            System.out.println("Server is already running.");
             return;
         }
         runningServer = true;
@@ -66,26 +66,27 @@ public class Peer2Peer {
         		serverThread.interrupt();
     			socket.close();
         } catch (NullPointerException n) {
-        		Log.log(Level.WARNING, "Null pointer when closing server socket");
+        		n.printStackTrace();
         }
-        Log.log(Level.INFO, "Server Stopped");
+        System.out.println("Server Stopped");
     }
 
     public void listen() throws IOException, SocketTimeoutException{
-        Log.log(Level.INFO, "Server starting...");
+        System.out.println("Server starting...");
         server = new ServerSocket(this.port);
-        Log.log(Level.INFO, "Server started on port " + this.port);
+        System.out.println("Server started on port " + this.port);
         	
         Peer peer;
         server.setSoTimeout(10000);
         while(runningServer){
+        		//System.out.println("Waiting for a connection");
         		try{
         			socket = server.accept();
-                Log.log(Level.INFO, "Passed Accept");
+                System.out.println("Passed Accept");
                 peer = new Peer(socket);
-                Log.log(Level.INFO, "Connection received from: " + peer.toString());
+                System.out.println("Connection received from: " + peer.toString());
                 peers.add(peer);
-                Log.log(Level.INFO, "New peer: " + peer.toString());
+                System.out.println("New peer: " + peer.toString());
         		} catch (SocketTimeoutException e) {
         			//e.printStackTrace();
         		}
@@ -96,8 +97,8 @@ public class Peer2Peer {
 
     public void connect(Socket socket){
         try {
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            Peer.send("ping", outputStream);		
+            out = new DataOutputStream(socket.getOutputStream());
+            Peer.send(commands.get(new ByteArrayKey((byte) 0xFF)).execute(new ByteArrayKey((byte) 0xFF)), out);		
         } catch (IOException e) {
             //e.printStackTrace();
         }

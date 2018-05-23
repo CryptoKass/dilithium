@@ -33,6 +33,11 @@ public final class ByteArrayKey
         }
         this.data = data;
     }
+    
+    public ByteArrayKey(byte data) {
+    		this.data = new byte[0];
+    		this.data[0] = data;
+    }
 
     @Override
     public boolean equals(Object other)
@@ -54,3 +59,4 @@ public final class ByteArrayKey
         return data;
     }
 }
+

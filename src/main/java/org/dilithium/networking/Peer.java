@@ -22,28 +22,18 @@ package org.dilithium.networking;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.dilithium.networking.Commands.NetworkCommand;
-import org.dilithium.networking.Commands.PingCommandHandler;
-import org.dilithium.util.Log;
-
+import org.dilithium.util.ByteArrayKey;
 
 public class Peer {
 	
     private Thread peerThread;  
     public Socket socket;
-    private static HashMap<String, NetworkCommand> commands = new HashMap<>();
-    public DataOutputStream out;
-    public DataInputStream in;
+    private static HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
     
 	public Peer(Socket socket)  {
 		this.socket = socket;
@@ -52,7 +42,7 @@ public class Peer {
 			public void run() {
                 try {
                     listen();
-                    Log.log(Level.INFO, "Closing connection to " + socket.getInetAddress() + ":" + socket.getPort());
+                    System.out.println("Closing connection to " + socket.getInetAddress() + ":" + socket.getPort());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -62,17 +52,15 @@ public class Peer {
 	}
 
 	private void initializeCommands() {
-        this.commands.put("ping", new PingCommandHandler());
-       
+		
     }
 	
 	public void listen() throws IOException {
-		String command;
+		byte[] command;
+		DataInputStream in = new DataInputStream(socket.getInputStream());
 		while(true){
-	    		//System.out.println("Listening for commands");
 	    		try{
-	    			DataInputStream in = new DataInputStream(this.socket.getInputStream());
-        			DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
+        			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
         			command = receive(in);
         			send(serve(command), out);
 	    		} catch (SocketTimeoutException e) {
@@ -83,46 +71,32 @@ public class Peer {
 		}
 	}
 	
-	public static String serve(String input) {
-        List<String> list = new ArrayList<>();
-        Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
-        while (m.find()) {
-            list.add(m.group(1));
-        }
-
-        String command = list.remove(0); // Get the command and remove it from the list.
-
-        if(!commands.containsKey(command)){
-            return "'" + command + "' is not a command.";
-        }
-
-        String[] args = null;
-        if (list.size() > 0){
-            args = list.toArray(new String[list.size()]);
-        }
-
-        return commands.get(command).execute(args);
+	public static byte[] serve(byte[] input) {
+		//TODO In execute, send the args as input without the first byte
+        return commands.get(new ByteArrayKey(input[0])).execute(new ByteArrayKey(input));
     }
 
-    public static void send(String data, DataOutputStream out){
-        Log.log(Level.INFO, "Sending message: " + data);
+    public static void send(byte[] data, DataOutputStream out){
+        System.out.println("Sending message: " + data);
         try {
-            out.writeUTF(data);
+        		out.writeInt(data.length);
+            out.write(data);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String receive(DataInputStream in){
-        String data = null;
-        try {
-            data = in.readUTF();
-            Log.log(Level.INFO, "Received message: " + data);
+    public byte[] receive(DataInputStream in){
+		byte[] data = null;
+		try {
+        		int size = in.readInt();
+        		in.readFully(data, 0, size);
+            System.out.println("Received message: "+ data);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return data;
+		return data;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package org.dilithium.networking.Commands;
 
+import org.dilithium.util.ByteArrayKey;
+
 public abstract class NetworkCommand {
 	
 	//TODO implement Commands
-	public static String execute(String[] args) {
-		return null;
-	}
+	public abstract byte[] execute(ByteArrayKey args);
+	
 }
+
