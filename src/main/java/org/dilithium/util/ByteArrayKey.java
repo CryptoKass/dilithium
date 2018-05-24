@@ -38,6 +38,13 @@ public final class ByteArrayKey
     		this.data = new byte[0];
     		this.data[0] = data;
     }
+    
+    public ByteArrayKey(byte[] data, int a, int b) {
+    		this.data = new byte[b-a+1];
+    		for(int i = 0; i < b-a+1; i++) {
+    			this.data[i] = data[i+a];
+    		}
+    }
 
     @Override
     public boolean equals(Object other)

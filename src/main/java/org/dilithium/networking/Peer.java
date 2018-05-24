@@ -73,7 +73,7 @@ public class Peer {
 	
 	public static byte[] serve(byte[] input) {
 		//TODO In execute, send the args as input without the first byte
-        return commands.get(new ByteArrayKey(input[0])).execute(new ByteArrayKey(input));
+        return commands.get(new ByteArrayKey(input[0])).execute(new ByteArrayKey(input,1,input.length-1));
     }
 
     public static void send(byte[] data, DataOutputStream out){
