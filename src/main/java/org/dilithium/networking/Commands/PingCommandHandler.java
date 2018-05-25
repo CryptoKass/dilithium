@@ -7,7 +7,7 @@ public class PingCommandHandler extends NetworkCommand{
 	
 	@Override
 	public byte[] execute(ByteArrayKey args) {
-
+		if(args.data[0].equals((byte)0xFF));
 		return null;
 	}
 
