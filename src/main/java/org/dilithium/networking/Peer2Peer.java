@@ -15,14 +15,13 @@ import java.util.regex.Pattern;
 
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
+import org.dilithium.util.ByteArrayKey;
 import org.dilithium.util.Log;
-
 
 public class Peer2Peer {
 
 	private int port;
-    private ArrayList<Peer>  peers;
-    private DataOutputStream outputStream;
+    private static ArrayList<Peer>  peers;
     public 	Thread           serverThread;
     private boolean          runningServer;
     private HashMap<String, NetworkCommand> commands = new HashMap<>();
@@ -96,10 +95,19 @@ public class Peer2Peer {
 
     public void connect(Socket socket){
         try {
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            Peer.send("ping", outputStream);		
+        		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+            Peer peer = new Peer(socket);
+            peer.send(commands.get(new ByteArrayKey((byte) 0xFF)).handle(new ByteArrayKey((byte) 0xFF, (byte) 0x00)), outputStream);	
+            peers.add(peer);		
         } catch (IOException e) {
             //e.printStackTrace();
         }
     }
+    
+    public static void propagate(ByteArrayKey data) {
+		for(Peer p: peers) {
+			System.out.println(p.socket.toString());
+			p.send(data.toByteArray(), p.out);
+		}
+}
 }
