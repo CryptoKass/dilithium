@@ -15,13 +15,14 @@ import java.util.regex.Pattern;
 
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
+import org.dilithium.networking.peerSet.PeerSet;
 import org.dilithium.util.ByteArrayKey;
 import org.dilithium.util.Log;
 
 public class Peer2Peer {
 
 	private int port;
-    private static ArrayList<Peer>  peers;
+    private static PeerSet peers;
     public 	Thread           serverThread;
     private boolean          runningServer;
     private HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
@@ -29,9 +30,9 @@ public class Peer2Peer {
     private Socket socket = null;
 
     //Node with access to blockchain
-    public Peer2Peer(int port){
+    public Peer2Peer(int port, byte[] address){
         this.port = port;
-        peers = new ArrayList<>();
+        peers = new PeerSet(address, 6);
         serverThread = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -109,9 +110,6 @@ public class Peer2Peer {
     }
     
     public static void propagate(ByteArrayKey data) {
-		for(Peer p: peers) {
-			System.out.println(p.socket.toString());
-			p.send(data.toByteArray(), p.out);
-		}
-}
+        peers.broadcast(data.toByteArray());
+    }
 }

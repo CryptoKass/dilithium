@@ -46,10 +46,10 @@ public class PeerSet {
         }
     }
 
-    public void broadcast(byte[] message, DataOutputStream out) {
+    public void broadcast(byte[] message) {
         for(int i = 0; i < 256; i++) {
             if(buckets[i] != null) {
-                buckets[i].broadcast(message, out);
+                buckets[i].broadcast(message);
             }
         }
     }
