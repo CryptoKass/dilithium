@@ -6,6 +6,7 @@ import org.dilithium.util.ecdsa.ECKey;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.Socket;
 import java.security.Security;
 import java.util.Scanner;
 
@@ -32,7 +33,9 @@ public class NetworkTest {
                         break;
                 case 2: listPeers();
                         break;
-                case 3: running = false;
+                case 3: addPeer();
+                        break;
+                case 4: running = false;
                         break;
             }
         }
@@ -46,6 +49,14 @@ public class NetworkTest {
     public void listPeers() {
         System.out.println("Listing connected peers: ");
         connection.listPeers();
+    }
+
+    public void addPeer() throws Exception {
+        System.out.print("Enter an IP: ");
+        String ip = s.next();
+        System.out.print("Enter a port: " );
+        int port = s.nextInt();
+        connection.connect(new Socket(ip, port));
     }
 
 }
