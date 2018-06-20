@@ -78,4 +78,16 @@ public class PeerSet {
 
         return temp;
     }
+
+    public String toString() {
+        String s = "";
+
+        for(int i = 0; i < 256; i++) {
+            if (buckets[i] != null) {
+                s = s + buckets[i].toString();
+            }
+        }
+
+        return s;
+    }
 }

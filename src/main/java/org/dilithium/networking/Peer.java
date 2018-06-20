@@ -44,10 +44,9 @@ public class Peer {
     private byte[] address;
     public Socket socket;
     private static HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
-    private DataOutputStream out;
+    public DataOutputStream out;
     private DataInputStream in;
     private boolean runningServer;
-    private byte[] address;
     
     public Peer(Socket socket)  {
 		this.socket = socket;
@@ -69,10 +68,6 @@ public class Peer {
         });	
 		start();
 	}
-
-	public byte[] getAddress() {
-        return address;
-    }
 
 	public void start(){
         if(peerThread.isAlive()){
