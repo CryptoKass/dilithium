@@ -62,7 +62,7 @@ public class Node implements Runnable{
     private Thread miningThread;
     
     /* This nodes peer to peer variables */
-    private Peer2Peer p2p;
+    private static Peer2Peer p2p;
     private int serverPort = 8888;
     
     /* Checks block and updates the state and adds it to the db context */
@@ -204,6 +204,8 @@ public class Node implements Runnable{
     public AccountState getAccount(byte[] address){
         return context.getAccount(address);
     }
+    
+    public 
     
     //Overrides
     @Override

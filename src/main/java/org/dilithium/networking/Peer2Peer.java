@@ -24,7 +24,7 @@ public class Peer2Peer {
     private static ArrayList<Peer>  peers;
     public 	Thread           serverThread;
     private boolean          runningServer;
-    private HashMap<String, NetworkCommand> commands = new HashMap<>();
+    private HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
     private ServerSocket server;
     private Socket socket = null;
 
@@ -47,7 +47,11 @@ public class Peer2Peer {
     
     
     private void initializeCommands() {
-        this.commands.put("ping", new PingCommandHandler()); 
+	    	/**List of Commands
+			 * 0xFF - Ping
+			 * 0x00 - Transaction
+			 */
+	    this.commands.put(new ByteArrayKey((byte)0xFF), new PingCommandHandler()); 
     }
 
     public void start(){

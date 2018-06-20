@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dilithium.Start;
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
 import org.dilithium.util.ByteArrayKey;
@@ -41,7 +42,7 @@ public class Peer {
 	
     private Thread peerThread;  
     public Socket socket;
-    private static HashMap<String, NetworkCommand> commands = new HashMap<>();
+    private static HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
     public DataOutputStream out;
     public DataInputStream in;
     public boolean runningServer;
@@ -88,7 +89,11 @@ public class Peer {
 	}
 
 	private void initializeCommands() {
-		this.commands = p2p.getCommands(); 
+		/**List of Commands
+		 * 0xFF - Ping
+		 * 0x00 - Transaction
+		 */
+		this.commands.put(new ByteArrayKey((byte)0xFF), new PingCommandHandler()); 
     }
 	
 	public void listen() throws IOException {
