@@ -43,9 +43,10 @@ public class Peer {
     private Thread peerThread;  
     public Socket socket;
     private static HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
-    public DataOutputStream out;
-    public DataInputStream in;
-    public boolean runningServer;
+    private DataOutputStream out;
+    private DataInputStream in;
+    private boolean runningServer;
+    private byte[] address;
     
     public Peer(Socket socket)  {
 		this.socket = socket;
@@ -142,6 +143,10 @@ public class Peer {
             e.printStackTrace();
         }
 		return data;
+    }
+    
+    public byte[] getAddress() {
+        return address;
     }
 
     @Override
