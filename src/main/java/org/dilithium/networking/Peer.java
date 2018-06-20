@@ -40,7 +40,8 @@ import org.dilithium.util.Log;
 
 public class Peer {
 	
-    private Thread peerThread;  
+    private Thread peerThread;
+    private byte[] address;
     public Socket socket;
     private static HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
     private DataOutputStream out;
@@ -68,6 +69,10 @@ public class Peer {
         });	
 		start();
 	}
+
+	public byte[] getAddress() {
+        return address;
+    }
 
 	public void start(){
         if(peerThread.isAlive()){

@@ -16,10 +16,10 @@ public class Bucket {
         this.ref = ref;
     }
 
-    public void broadcast(byte[] message, DataOutputStream out) {
+    public void broadcast(byte[] message) {
         for( int i = 0; i < k; i++) {
             if(peers[i] != null) {
-                peers[i].send(message, out);
+                peers[i].send(message, peers[i].out);
             }
         }
     }
