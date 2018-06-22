@@ -1,5 +1,6 @@
 package org.dilithium.networking.peerSet;
 
+import org.bouncycastle.util.encoders.Hex;
 import org.dilithium.networking.Peer;
 
 import java.io.DataOutputStream;
@@ -64,5 +65,16 @@ public class Bucket {
         }
 
         return -1;
+    }
+
+    public String toString() {
+        String s = "";
+        for(int i = 0; i < k; i++) {
+            if(peers[i] != null) {
+                s = s + "Peer " + Hex.toHexString(peers[i].getAddress()) + " at " + peers[i].socket.getInetAddress().getHostAddress() + ":" + peers[i].socket.getPort() + "\n";
+            }
+        }
+
+        return s;
     }
 }

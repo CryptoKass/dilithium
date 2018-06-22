@@ -45,6 +45,10 @@ public class Peer2Peer {
         });		
         initializeCommands();
     }
+
+    public void listPeers() {
+        System.out.println(peers.toString());
+    }
     
     
     private void initializeCommands() {
@@ -111,5 +115,9 @@ public class Peer2Peer {
     
     public static void propagate(ByteArrayKey data) {
         peers.broadcast(data.toByteArray());
+    }
+
+    public static void propagate(byte[] data) {
+        peers.broadcast(data);
     }
 }
