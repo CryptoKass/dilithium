@@ -15,24 +15,24 @@ import java.util.regex.Pattern;
 
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
+import org.dilithium.networking.peerSet.PeerSet;
+import org.dilithium.util.ByteArrayKey;
 import org.dilithium.util.Log;
-
 
 public class Peer2Peer {
 
 	private int port;
-    private ArrayList<Peer>  peers;
-    private DataOutputStream outputStream;
+    private static PeerSet peers;
     public 	Thread           serverThread;
     private boolean          runningServer;
-    private HashMap<String, NetworkCommand> commands = new HashMap<>();
+    private HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
     private ServerSocket server;
     private Socket socket = null;
 
     //Node with access to blockchain
-    public Peer2Peer(int port){
+    public Peer2Peer(int port, byte[] address){
         this.port = port;
-        peers = new ArrayList<>();
+        peers = new PeerSet(address, 6);
         serverThread = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -48,7 +48,11 @@ public class Peer2Peer {
     
     
     private void initializeCommands() {
-        this.commands.put("ping", new PingCommandHandler()); 
+	    	/**List of Commands
+			 * 0xFF - Ping
+			 * 0x00 - Transaction
+			 */
+	    this.commands.put(new ByteArrayKey((byte)0xFF), new PingCommandHandler()); 
     }
 
     public void start(){
@@ -96,10 +100,16 @@ public class Peer2Peer {
 
     public void connect(Socket socket){
         try {
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            Peer.send("ping", outputStream);		
+        		DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+            Peer peer = new Peer(socket);
+            peer.send(commands.get(new ByteArrayKey((byte) 0xFF)).handle(new ByteArrayKey((byte) 0xFF, (byte) 0x00)), outputStream);	
+            peers.add(peer);		
         } catch (IOException e) {
             //e.printStackTrace();
         }
+    }
+    
+    public static void propagate(ByteArrayKey data) {
+        peers.broadcast(data.toByteArray());
     }
 }

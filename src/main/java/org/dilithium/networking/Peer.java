@@ -32,47 +32,82 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dilithium.Start;
 import org.dilithium.networking.Commands.NetworkCommand;
 import org.dilithium.networking.Commands.PingCommandHandler;
+import org.dilithium.util.ByteArrayKey;
 import org.dilithium.util.Log;
-
 
 public class Peer {
 	
-    private Thread peerThread;  
+    private Thread peerThread;
+    private byte[] address;
     public Socket socket;
-    private static HashMap<String, NetworkCommand> commands = new HashMap<>();
-    public DataOutputStream out;
-    public DataInputStream in;
+    private static HashMap<ByteArrayKey, NetworkCommand> commands = new HashMap<>();
+    private DataOutputStream out;
+    private DataInputStream in;
+    private boolean runningServer;
     
-	public Peer(Socket socket)  {
+    public Peer(Socket socket)  {
 		this.socket = socket;
+		try {
+			this.out = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
         initializeCommands();
 		peerThread = new Thread(new Runnable() {
 			public void run() {
                 try {
                     listen();
-                    Log.log(Level.INFO, "Closing connection to " + socket.getInetAddress() + ":" + socket.getPort());
+                    System.out.println("Closing connection to " + socket.getInetAddress() + ":" + socket.getPort());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });	
-		peerThread.start();
+		start();
+	}
+
+	public byte[] getAddress() {
+        return address;
+    }
+
+	public void start(){
+        if(peerThread.isAlive()){
+            System.out.println("Peer Thread is already running.");
+            return;
+        }
+        runningServer = true;
+        peerThread.start();
+    }
+	
+	public void stop() throws IOException{
+		runningServer = false;
+		try {
+			peerThread.interrupt();
+			socket.close();
+	    } catch (NullPointerException n) {
+	    		n.printStackTrace();
+	    }
+	    System.out.println("Peer Closed");
 	}
 
 	private void initializeCommands() {
-        this.commands.put("ping", new PingCommandHandler());
-       
+		/**List of Commands
+		 * 0xFF - Ping
+		 * 0x00 - Transaction
+		 */
+		this.commands.put(new ByteArrayKey((byte)0xFF), new PingCommandHandler()); 
     }
 	
 	public void listen() throws IOException {
-		String command;
-		while(true){
-	    		//System.out.println("Listening for commands");
+		byte[] command;
+		DataInputStream in = new DataInputStream(socket.getInputStream());
+		System.out.println("Listening to socket :" + socket.toString());
+		while(runningServer){
 	    		try{
-	    			DataInputStream in = new DataInputStream(this.socket.getInputStream());
-        			DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
+        			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
         			command = receive(in);
         			send(serve(command), out);
 	    		} catch (SocketTimeoutException e) {
@@ -83,46 +118,35 @@ public class Peer {
 		}
 	}
 	
-	public static String serve(String input) {
-        List<String> list = new ArrayList<>();
-        Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(input);
-        while (m.find()) {
-            list.add(m.group(1));
-        }
-
-        String command = list.remove(0); // Get the command and remove it from the list.
-
-        if(!commands.containsKey(command)){
-            return "'" + command + "' is not a command.";
-        }
-
-        String[] args = null;
-        if (list.size() > 0){
-            args = list.toArray(new String[list.size()]);
-        }
-
-        return commands.get(command).execute(args);
+	public byte[] serve(byte[] input) {
+		//In execute, send the args as input without the first byte
+        return commands.get(new ByteArrayKey(input[0])).handle(new ByteArrayKey(input));
     }
 
-    public static void send(String data, DataOutputStream out){
-        Log.log(Level.INFO, "Sending message: " + data);
+	public void send(byte[] data, DataOutputStream out){
         try {
-            out.writeUTF(data);
-            out.flush();
+        		if(data != null) {
+	        		out.writeInt(data.length);
+	            out.write(data);
+	            out.flush();
+        		}
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String receive(DataInputStream in){
-        String data = null;
-        try {
-            data = in.readUTF();
-            Log.log(Level.INFO, "Received message: " + data);
+    public byte[] receive(DataInputStream in){
+		byte[] data = null;
+		int size = 0;
+		try {
+        		size = in.readInt();
+        		data = new byte[size];
+        		in.readFully(data, 0, size);
+            System.out.println("Received message " + size);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return data;
+		return data;
     }
 
     @Override
