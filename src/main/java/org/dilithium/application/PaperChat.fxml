@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dilithium.application.PaperController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0">
+         <image>
+            <Image url="@../Pictures/purple.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="-4.0" prefHeight="133.0" prefWidth="606.0">
+         <children>
+            <ImageView fitHeight="314.0" fitWidth="606.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <image>
+                  <Image url="@../Pictures/pinkish.jpg" />
+               </image>
+            </ImageView>
+            <Label layoutX="290.0" layoutY="14.0" text="Paper Chat" textFill="#500968">
+               <font>
+                  <Font name="Book Antiqua Bold Italic" size="19.0" />
+               </font>
+            </Label>
+            <ImageView layoutX="219.0" layoutY="3.0">
+               <image>
+                  <Image url="@../Pictures/Dilithium.png" />
+               </image>
+            </ImageView>
+            <JFXTextArea fx:id="textView" editable="false" layoutX="36.0" layoutY="61.0" prefHeight="223.0" prefWidth="534.0">
+               <font>
+                  <Font name="Book Antiqua" size="16.0" />
+               </font>
+            </JFXTextArea>
+            <JFXButton fx:id="connectButton" layoutX="18.0" layoutY="14.0" onAction="#ConnectDlg" style="-fx-background-color: #f8b195;" text="Connect" textFill="#5a0b68">
+               <font>
+                  <Font name="Book Antiqua Bold Italic" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+      
+      <JFXTextField fx:id="msg_text" layoutX="39.0" layoutY="344.0" onAction="#onEnter" prefHeight="31.0" prefWidth="424.0" style="-fx-background-color: #f8b195;" />
+      <JFXButton fx:id="msgSend" layoutX="512.0" layoutY="344.0" onAction="#Send" style="-fx-background-color: #f8b195;" text="Chat" textFill="#5a0b68">
+         <font>
+            <Font name="Book Antiqua Bold Italic" size="15.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

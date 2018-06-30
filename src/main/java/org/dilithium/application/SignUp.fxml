@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="388.0" prefWidth="555.0" style="-fx-background-color: #c06c84;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dilithium.application.src.Control">
+   <children>
+      <ImageView fitHeight="388.0" fitWidth="555.0" layoutX="1.0" layoutY="2.0">
+         <image>
+            <Image url="@../Pictures/pinkish.jpg" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="cancelButton" layoutX="133.0" layoutY="307.0" onAction="#Close" style="-fx-background-color: #6C5B7B;" text="Cancel" textFill="#f8b195" />
+      <Label layoutX="56.0" layoutY="117.0" text="User Name:" />
+      <JFXTextField fx:id="userName" layoutX="159.0" layoutY="104.0" prefHeight="31.0" prefWidth="285.0" />
+      <JFXPasswordField fx:id="pass" layoutX="159.0" layoutY="164.0" prefHeight="31.0" prefWidth="285.0" />
+      <JFXPasswordField fx:id="confirmPass" layoutX="159.0" layoutY="228.0" prefHeight="31.0" prefWidth="285.0" />
+      <Label layoutX="56.0" layoutY="231.0" text="Confirm Pass:" />
+      <Label layoutX="56.0" layoutY="176.0" text="Password:" />
+      <Label layoutX="190.0" layoutY="33.0" text="Create Account">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="regButton" layoutX="348.0" layoutY="307.0" onAction="#Reg" style="-fx-background-color: #6C5B7B;" text="Register" textFill="#f8b195" />
+        </children>
+</AnchorPane>
