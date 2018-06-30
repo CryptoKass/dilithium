@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dilithium.application.PaperController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../Pictures/blue-construction-paper-texture.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="168.0" layoutY="37.0" text="Dilithium Connection" textFill="#f8b195">
+         <font>
+            <Font name="Book Antiqua Bold Italic" size="31.0" />
+         </font>
+      </Label>
+      <Label layoutX="167.0" layoutY="124.0" text="IP" textFill="#f8b195">
+         <font>
+            <Font name="Book Antiqua Bold Italic" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="150.0" layoutY="218.0" text="Port" textFill="#f8b195">
+         <font>
+            <Font name="Book Antiqua Bold Italic" size="17.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="ipAddr" layoutX="202.0" layoutY="119.0" style="-fx-background-color: #f67280;" />
+      <JFXTextField fx:id="port" layoutX="202.0" layoutY="203.0" style="-fx-background-color: #f67280;" />
+      <JFXButton fx:id="connectButton" layoutX="238.0" layoutY="308.0" onAction="#Connect" prefHeight="31.0" prefWidth="107.0" style="-fx-background-color: #6c5b7b;" text="Connect" textFill="#f8b195">
+         <font>
+            <Font name="Book Antiqua Bold Italic" size="17.0" />
+         </font>
+      </JFXButton>
+      <ImageView layoutX="103.0" layoutY="29.0">
+         <image>
+            <Image url="@../Pictures/Dilithium.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="969.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Control">
+   <children>
+      <ImageView fitHeight="552.0" fitWidth="969.0">
+         <image>
+            <Image url="@../../../../../../../../../../Pictures/Minimalist-Pictures-HD-deepblue.jpg" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="sendButton" layoutX="115.0" layoutY="461.0" onAction="#Send" style="-fx-background-color: #6C5B7B;" text="Send" textFill="#f8b195" />
+      <JFXButton fx:id="recieveButton" layoutX="354.0" layoutY="461.0" onAction="#Recieve" style="-fx-background-color: #6C5B7B;" text="Recieve" textFill="#f8b195" />
+      <JFXButton fx:id="QRCodeButton" layoutX="580.0" layoutY="461.0" onAction="#QRCode" style="-fx-background-color: #6C5B7B;" text="QR Code" textFill="#f8b195" />
+      <Label layoutX="91.0" layoutY="76.0" text="Balance" textFill="#f8b195">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="Balance" layoutX="115.0" layoutY="129.0" text="\$" textFill="#f8b195">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="shopButton" layoutX="840.0" layoutY="461.0" onAction="#getShop" style="-fx-background-color: #6C5B7B;" text="Shop" textFill="#f8b195" />
+      <JFXButton fx:id="logoutButton" layoutX="834.0" layoutY="87.0" onAction="#Close" style="-fx-background-color: #6C5B7B;" text="Logout" textFill="#f8b195" />
+   </children>
+</AnchorPane>

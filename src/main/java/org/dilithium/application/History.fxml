@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Control">
+   <children>
+      <SplitPane dividerPositions="0.29797979797979796" layoutX="1.0" layoutY="125.0" prefHeight="350.0" prefWidth="843.0" AnchorPane.leftAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="223.0" prefWidth="81.0">
+               <children>
+                  <JFXListView fx:id="transactionHistory" layoutX="14.0" layoutY="-83.0" prefHeight="348.0" prefWidth="247.0" style="-fx-background-color: #f8b195;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #c06c84;">
+               <children>
+                  <AnchorPane layoutX="6.0" prefHeight="348.0" prefWidth="586.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutX="34.0" layoutY="31.0" text="To:" textFill="#f8b195">
+                           <font>
+                              <Font name="Book Antiqua Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="34.0" layoutY="87.0" text="From:" textFill="#f8b195">
+                           <font>
+                              <Font name="Book Antiqua Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="28.0" layoutY="148.0" text="Amount:" textFill="#f8b195">
+                           <font>
+                              <Font name="Book Antiqua Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="32.0" layoutY="204.0" text="Fee Paid:" textFill="#f8b195">
+                           <font>
+                              <Font name="Book Antiqua Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="33.0" layoutY="264.0" text="Message:" textFill="#f8b195">
+                           <font>
+                              <Font name="Book Antiqua Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField layoutX="143.0" layoutY="21.0" prefHeight="31.0" prefWidth="416.0" />
+                        <JFXTextField layoutX="143.0" layoutY="77.0" prefHeight="31.0" prefWidth="416.0" />
+                        <JFXTextField layoutX="143.0" layoutY="146.0" prefHeight="31.0" prefWidth="416.0" />
+                        <JFXTextField layoutX="143.0" layoutY="202.0" prefHeight="31.0" prefWidth="416.0" />
+                        <JFXTextField layoutX="143.0" layoutY="262.0" prefHeight="31.0" prefWidth="416.0" />
+                     </children>
+                  </AnchorPane>
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+      <AnchorPane layoutX="-1.0" prefHeight="127.0" prefWidth="843.0" style="-fx-background-color: #c06c84;" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Label layoutX="312.0" layoutY="48.0" text="Transaction History" textFill="#f8b195">
+               <font>
+                  <Font name="Book Antiqua Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="cancelButton" layoutX="747.0" layoutY="48.0" onAction="#Close" style="-fx-background-color: #6C5B7B;" text="Exit" textFill="#f8b195" />
+            <ImageView layoutX="43.0" layoutY="39.0">
+               <image>
+                  <Image url="@../../../../../../../../../../Pictures/Dilithium.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+   </children>
+</AnchorPane>

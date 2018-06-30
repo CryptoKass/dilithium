@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="610.0" style="-fx-background-color: #c06c84;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Control">
+   <children>
+      <Pane layoutX="55.0" layoutY="215.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #f8b195;" />
+      <JFXButton fx:id="cancelButton" layoutX="158.0" layoutY="740.0" onAction="#Close" style="-fx-background-color: #6C5B7B;" text="Cancel" textFill="#f8b195" />
+      <JFXButton layoutX="370.0" layoutY="740.0" style="-fx-background-color: #6C5B7B;" text="Generate" textFill="#f8b195" />
+      <Label layoutX="55.0" layoutY="36.0" text="To:" />
+      <Label layoutX="55.0" layoutY="93.0" text="From:" />
+      <Label layoutX="55.0" layoutY="149.0" text="Amount:" />
+      <JFXTextField layoutX="158.0" layoutY="31.0" prefHeight="31.0" prefWidth="397.0" />
+      <JFXTextField layoutX="158.0" layoutY="88.0" prefHeight="31.0" prefWidth="397.0" />
+      <JFXTextField layoutX="158.0" layoutY="144.0" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="949.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pivotnse.PivotFXController">
+   <children>
+      <AnchorPane prefHeight="134.0" prefWidth="900.0">
+         <children>
+            <Button fx:id="myDeleteButton" layoutX="339.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleDeleteButton" prefHeight="35.0" prefWidth="80.0" text="DELETE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="myLoadButton" layoutX="258.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleLoadButton" prefHeight="35.0" prefWidth="68.0" text="LOAD">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="myOKButton" layoutX="198.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleOKButton" prefHeight="35.0" prefWidth="50.0" text="OK" textOverrun="CLIP">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <TextField id="textinput" fx:id="symbolField" layoutX="7.0" layoutY="88.0" onAction="#handleOKButton" prefHeight="35.0" prefWidth="180.0" promptText="Type SYMBOL...">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </TextField>
+            <TableView fx:id="indexTable" prefHeight="135.0" prefWidth="400.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+               <columns>
+                  <TableColumn fx:id="indexCol" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="-1.0" style="-fx-font: bold italic 16px &quot;Arial&quot;;" text="INDEX" />
+                  <TableColumn fx:id="valueCol" editable="false" maxWidth="100.0" minWidth="80.0" prefWidth="100.0" style="-fx-font: bold italic 16px &quot;Arial&quot;;" text="VALUE" />
+                  <TableColumn fx:id="changeCol" editable="false" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" style="-fx-font: bold italic 16px &quot;Arial&quot;;" text="Change" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Label fx:id="statusSymbol" layoutX="14.0" layoutY="29.0" text="SYMBOLS STATUS">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <ProgressBar fx:id="downProgress" layoutX="6.0" layoutY="67.0" prefHeight="18.0" prefWidth="415.0" progress="0.0" style="-fx-background-color: lawngreen; -fx-background-insets: green;" />
+            <VBox layoutX="471.0" layoutY="65.0" prefHeight="62.0" prefWidth="80.0">
+               <children>
+                  <Button fx:id="goLive" mnemonicParsing="false" onAction="#handleLiveButton" prefHeight="30.0" prefWidth="78.0" text="LIVE!">
+                     <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="off" mnemonicParsing="false" onAction="#handleLiveOff" prefHeight="30.0" prefWidth="79.0" text="STOP">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <TableView fx:id="pivotTable" prefHeight="805.0" prefWidth="900.0" style="-fx-font-size: 20;" VBox.vgrow="ALWAYS">
+         <columns>
+            <TableColumn id="symbolField" fx:id="symbolColumn" editable="false" maxWidth="200.0" minWidth="100.0" prefWidth="-1.0" style="-fx-background-color: #D1FFFF; -fx-alignment: center; -fx-text-fill: black; -fx-font: bold 19px &quot;Arial&quot;;" text="SYMBOLS" />
+            <TableColumn fx:id="ltpColumn" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" text="LTP" />
+            <TableColumn id="s3field" fx:id="s3Column" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" style="-fx-background-color: #FF6666; -fx-alignment: center; -fx-font-size: 18px; -fx-text-fill: black;" text="S3" />
+            <TableColumn id="s2field" fx:id="s2Column" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" style="-fx-background-color: #FF8080; -fx-alignment: center; -fx-font-size: 18px; -fx-text-fill: black;" text="S2" />
+            <TableColumn id="s1field" fx:id="s1Column" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" style="-fx-background-color: #FFB2B2; -fx-alignment: center; -fx-font-size: 18px; -fx-text-fill: black;" text="S1" />
+            <TableColumn id="pivotfield" fx:id="pivotColumn" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" style="-fx-background-color: #E6E6E6; -fx-alignment: center; -fx-font-size: 18px; -fx-text-fill: black; -fx-font: bold italic 19px &quot;Arial&quot;;" text="Pivot" />
+            <TableColumn id="r1field" fx:id="r1Column" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" style="-fx-background-color: #A3FFA3; -fx-alignment: center; -fx-font-size: 18px; -fx-text-fill: black;" text="R1" />
+            <TableColumn id="r2field" fx:id="r2Column" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" style="-fx-background-color: #85FF85; -fx-alignment: center; -fx-font-size: 18px; -fx-text-fill: black;" text="R2" />
+            <TableColumn id="r3field" fx:id="r3Column" editable="false" maxWidth="100.0" prefWidth="100.0" resizable="false" style="-fx-background-color: #66FF66; -fx-alignment: center; -fx-font-size: 18px; -fx-text-fill: black;" text="R3" />
+         </columns>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</VBox>
